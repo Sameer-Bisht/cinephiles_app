@@ -4,18 +4,18 @@ import { env } from '../config/env.js';
 import { User } from '../models/User.js';
 import { Conversation } from '../models/Conversation.js';
 import * as chatService from '../services/chat.service.js';
-
+import { corsOrigin } from '../config/cors.js';
 let ioInstance = null;
 
 export const getIO = () => ioInstance;
 
 export const initSocket = (httpServer) => {
   ioInstance = new Server(httpServer, {
-    cors: {
-      origin: env.CLIENT_URL,
-      credentials: true,
-    },
-  });
+  cors: {
+    origin: corsOrigin,
+    credentials: true,
+  },
+});
 
   ioInstance.use(async (socket, next) => {
     try {
