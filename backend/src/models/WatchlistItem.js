@@ -16,6 +16,11 @@ const watchlistItemSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    mediaType: {
+  type: String,
+  enum: ['movie', 'tv'],
+  default: 'movie',
+},
     addedAt: {
       type: Date,
       default: Date.now,
