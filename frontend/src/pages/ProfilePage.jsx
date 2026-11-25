@@ -1,0 +1,311 @@
+import { useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Film, MessageSquare, Settings, User as UserIcon, UserCheck, UserPlus, Users } from 'lucide-react';
+import { socialApi } from '../api/social.api';
+import { listsApi } from '../api/lists.api';
+import { chatApi } from '../api/chat.api';
+import { MovieCard } from '../components/MovieCard';
+import { ListCard } from '../components/ListCard';
+import { getPosterUrl } from '../utils/tmdb';
+
+const VERDICT_BADGE = {
+  skip: { label: 'Pass', classes: 'bg-rose-500/15 text-rose-300 border-rose-500/30' },
+  casual: { label: 'Casual', classes: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
+  recommended: { label: 'Worth It', classes: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
+  masterpiece: { label: 'Masterpiece', classes: 'bg-violet-500/15 text-violet-300 border-violet-500/30' },
+};
+
+export function ProfilePage() {
+  const { username } = useParams();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = useState('reviews');
+
+  const profileQuery = useQuery({
+    queryKey: ['profile', username],
+    queryFn: () => socialApi.getProfile(username),
+  });
+
+  const reviewsQuery = useQuery({
+    queryKey: ['profile', username, 'reviews'],
+    queryFn: () => socialApi.getUserReviews(username, 1),
+    enabled: activeTab === 'reviews',
+  });
+
+  const watchlistQuery = useQuery({
+    queryKey: ['profile', username, 'watchlist'],
+    queryFn: () => socialApi.getUserWatchlist(username, 1),
+    enabled: activeTab === 'watchlist',
+  });
+
+  const listsQuery = useQuery({
+    queryKey: ['lists', 'user', username],
+    queryFn: () => listsApi.getUserLists(username),
+    enabled: activeTab === 'lists',
+  });
+
+  const followMutation = useMutation({
+    mutationFn: (currentlyFollowing) =>
+      currentlyFollowing ? socialApi.unfollow(username) : socialApi.follow(username),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile', username] });
+      queryClient.invalidateQueries({ queryKey: ['friends'] });
+      queryClient.invalidateQueries({ queryKey: ['feed'] });
+    },
+  });
+
+  const messageMutation = useMutation({
+    mutationFn: () => chatApi.startConversation(username),
+    onSuccess: (conv) => {
+      navigate(`/chat?c=${conv._id}`);
+    },
+  });
+
+  if (profileQuery.isLoading) {
+    return <div className="h-48 animate-pulse rounded-2xl bg-zinc-900" />;
+  }
+
+  if (profileQuery.isError) {
+    return (
+      <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-6 text-sm text-red-300">
+        {profileQuery.error?.response?.data?.message || 'Could not load profile.'}
+      </div>
+    );
+  }
+
+  const { user: profileUser, stats, relationship } = profileQuery.data;
+
+  return (
+    <div className="space-y-8">
+      {/* Profile Header */}
+      <section className="flex flex-col gap-6 rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+        <div className="flex items-start gap-5">
+          {profileUser.avatarUrl ? (
+            <img
+              src={profileUser.avatarUrl}
+              alt={profileUser.displayName}
+              className="h-20 w-20 shrink-0 rounded-full border border-zinc-700 object-cover"
+            />
+          ) : (
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-zinc-700 bg-zinc-800 text-zinc-400">
+              <UserIcon className="h-9 w-9" />
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <h1 className="text-2xl font-bold text-white">
+                {profileUser.displayName || profileUser.username}
+              </h1>
+              {relationship.isMutual && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-300">
+                  <Users className="h-3 w-3" />
+                  Friends
+                </span>
+              )}
+            </div>
+            <p className="text-sm text-zinc-400">@{profileUser.username}</p>
+            {profileUser.bio && <p className="max-w-xl text-sm text-zinc-300">{profileUser.bio}</p>}
+
+            <div className="flex flex-wrap gap-5 pt-1 text-sm text-zinc-400">
+              <span>
+                <strong className="text-white">{stats.reviewsCount}</strong> Reviews
+              </span>
+              <span>
+                <strong className="text-white">{profileUser.followersCount}</strong> Followers
+              </span>
+              <span>
+                <strong className="text-white">{profileUser.followingCount}</strong> Following
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="shrink-0">
+          {relationship.isSelf ? (
+            <Link
+              to="/settings"
+              className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-2 text-sm font-medium text-zinc-200 hover:bg-zinc-800"
+            >
+              <Settings className="h-4 w-4" />
+              Edit Profile
+            </Link>
+          ) : (
+            <>
+              <button
+                type="button"
+                disabled={followMutation.isPending}
+                onClick={() => followMutation.mutate(relationship.isFollowing)}
+                className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition ${
+                  relationship.isFollowing
+                    ? 'border border-zinc-700 bg-zinc-950 text-zinc-200 hover:border-rose-500/50 hover:text-rose-300'
+                    : 'bg-violet-600 text-white hover:bg-violet-500'
+                }`}
+              >
+                {relationship.isFollowing ? (
+                  <>
+                    <UserCheck className="h-4 w-4" />
+                    Following
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="h-4 w-4" />
+                    {relationship.followsMe ? 'Follow back' : 'Follow'}
+                  </>
+                )}
+              </button>
+              <button
+                type="button"
+                disabled={messageMutation.isPending}
+                onClick={() => messageMutation.mutate()}
+                className="ml-2 inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-2.5 text-sm font-semibold text-zinc-200 transition hover:bg-zinc-800"
+              >
+                <MessageSquare className="h-4 w-4" />
+                Message
+              </button>
+            </>
+          )}
+        </div>
+      </section>
+
+      {/* Tabs */}
+      <div className="flex gap-2 border-b border-zinc-800 pb-3">
+        <button
+          type="button"
+          onClick={() => setActiveTab('reviews')}
+          className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+            activeTab === 'reviews'
+              ? 'bg-violet-600 text-white'
+              : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
+          }`}
+        >
+          Reviews & Diary
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('watchlist')}
+          className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+            activeTab === 'watchlist'
+              ? 'bg-violet-600 text-white'
+              : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
+          }`}
+        >
+          Watchlist
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('lists')}
+          className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+            activeTab === 'lists'
+              ? 'bg-violet-600 text-white'
+              : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
+          }`}
+        >
+          Lists
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'reviews' ? (
+        reviewsQuery.isLoading ? (
+          <div className="space-y-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-28 animate-pulse rounded-2xl bg-zinc-900" />
+            ))}
+          </div>
+        ) : reviewsQuery.data?.results?.length === 0 ? (
+          <p className="text-sm text-zinc-400">No logged films or reviews yet.</p>
+        ) : (
+          <div className="space-y-4">
+            {reviewsQuery.data?.results?.map((review) => {
+              const posterUrl = getPosterUrl(review.movie?.posterPath, 'w185');
+              const badge = review.verdict ? VERDICT_BADGE[review.verdict] : null;
+              return (
+                <div
+                  key={review._id}
+                  className="flex gap-4 rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-4"
+                >
+                  <Link
+                    to={`/movies/${review.tmdbId}`}
+                    className="w-16 shrink-0 overflow-hidden rounded-lg bg-zinc-900"
+                  >
+                    {posterUrl ? (
+                      <img
+                        src={posterUrl}
+                        alt={review.movie?.title}
+                        className="aspect-[2/3] w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex aspect-[2/3] items-center justify-center text-zinc-600">
+                        <Film className="h-5 w-5" />
+                      </div>
+                    )}
+                  </Link>
+                  <div className="flex-1 space-y-1.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <Link
+                        to={`/movies/${review.tmdbId}`}
+                        className="font-semibold text-white hover:text-violet-300"
+                      >
+                        {review.movie?.title}{' '}
+                        {review.movie?.releaseYear && (
+                          <span className="text-xs font-normal text-zinc-500">
+                            ({review.movie.releaseYear})
+                          </span>
+                        )}
+                      </Link>
+                      {badge && (
+                        <span
+                          className={`rounded-full border px-2.5 py-0.5 text-xs font-semibold ${badge.classes}`}
+                        >
+                          {badge.label}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-zinc-500">
+                      Watched {new Date(review.watchedAt).toLocaleDateString()}
+                    </p>
+                    {review.content && (
+                      <p className="line-clamp-3 text-sm text-zinc-300">{review.content}</p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )
+      ) : activeTab === 'watchlist' ? (
+        watchlistQuery.isLoading ? (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="aspect-[2/3] animate-pulse rounded-xl bg-zinc-900" />
+            ))}
+          </div>
+        ) : watchlistQuery.data?.results?.length === 0 ? (
+          <p className="text-sm text-zinc-400">Watchlist is empty.</p>
+        ) : (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5">
+            {watchlistQuery.data.results.map(({ movie }) => (
+              <MovieCard key={movie.tmdbId} movie={movie} />
+            ))}
+          </div>
+        )
+      ) : listsQuery.isLoading ? (
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="h-52 animate-pulse rounded-2xl bg-zinc-900" />
+          ))}
+        </div>
+      ) : listsQuery.data?.length === 0 ? (
+        <p className="text-sm text-zinc-400">No lists to show.</p>
+      ) : (
+        <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
+          {listsQuery.data?.map((list) => (
+            <ListCard key={list._id} list={list} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
