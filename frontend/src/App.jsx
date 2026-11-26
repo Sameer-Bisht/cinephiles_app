@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { authApi } from './api/auth.api';
 import { useAuthStore } from './store/authStore';
@@ -58,6 +58,12 @@ function SessionBootstrap({ children }) {
   return children;
 }
 
+// Old links like /movies/123 keep working and are treated as movies
+function LegacyMovieRedirect() {
+  const { tmdbId } = useParams();
+  return <Navigate to={`/title/movie/${tmdbId}`} replace />;
+}
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -67,7 +73,9 @@ export default function App() {
             <Route element={<MainLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/search" element={<SearchPage />} />
-              <Route path="/movies/:tmdbId" element={<MovieDetailPage />} />
+              {/* mediaType is 'movie' or 'tv': TMDB IDs overlap between the two */}
+              <Route path="/title/:mediaType/:tmdbId" element={<MovieDetailPage />} />
+              <Route path="/movies/:tmdbId" element={<LegacyMovieRedirect />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route element={<ProtectedRoute />}>
