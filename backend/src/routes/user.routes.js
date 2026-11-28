@@ -18,6 +18,7 @@ router.patch('/me/avatar', uploadAvatar.single('avatar'), userController.uploadM
 
 router.get('/:username', userController.getProfile);
 router.get('/:username/reviews', userController.getUserReviews);
+router.get('/:username/watchlog', userController.getUserWatchlog);
 router.get('/:username/watchlist', userController.getUserWatchlist);
 
 router.post('/:username/follow', followController.follow);

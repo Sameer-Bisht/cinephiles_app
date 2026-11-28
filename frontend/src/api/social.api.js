@@ -13,6 +13,12 @@ export const socialApi = {
     const { data } = await api.get(`/users/${username}/reviews`, { params: { page } });
     return data.data;
   },
+  getUserWatchlog: async (username, { period = 'all', sort = 'latest', page = 1 } = {}) => {
+    const { data } = await api.get(`/users/${username}/watchlog`, {
+      params: { period, sort, page },
+    });
+    return data.data;
+  },
   getUserWatchlist: async (username, page = 1) => {
     const { data } = await api.get(`/users/${username}/watchlist`, { params: { page } });
     return data.data;

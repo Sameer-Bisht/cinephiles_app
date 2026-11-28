@@ -22,10 +22,22 @@ export const getUserReviews = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, data, 'User reviews fetched'));
 });
 
+export const getUserWatchlog = asyncHandler(async (req, res) => {
+  const { period = 'all', sort = 'latest', page = 1, limit = 24 } = req.query;
+  const data = await userService.getUserWatchlog(req.params.username, {
+    period,
+    sort,
+    page: Number(page) || 1,
+    limit: Number(limit) || 24,
+  });
+  return res.status(200).json(new ApiResponse(200, data, 'User watchlog fetched'));
+});
+
 export const getUserWatchlist = asyncHandler(async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   const data = await userService.getUserWatchlist(
     req.params.username,
+    req.user._id,
     Number(page) || 1,
     Number(limit) || 20
   );

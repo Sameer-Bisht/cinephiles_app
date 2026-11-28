@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Bell, CheckCheck } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import { notificationsApi } from '../api/notifications.api';
 import { useSocketStore } from '../store/socketStore';
 
@@ -68,6 +68,13 @@ export function NotificationBell() {
   const unreadCount = data?.unreadCount || 0;
   const items = data?.results || [];
 
+  // Auto-mark notifications as read as soon as the user opens and sees them
+  useEffect(() => {
+    if (open && unreadCount > 0 && !markReadMutation.isPending) {
+      markReadMutation.mutate();
+    }
+  }, [open, unreadCount, markReadMutation]);
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
@@ -88,16 +95,7 @@ export function NotificationBell() {
         <div className="absolute right-0 mt-2 w-80 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl">
           <div className="flex items-center justify-between border-b border-zinc-800 px-4 py-3">
             <span className="text-sm font-semibold text-white">Notifications</span>
-            {unreadCount > 0 && (
-              <button
-                type="button"
-                onClick={() => markReadMutation.mutate()}
-                className="inline-flex items-center gap-1 text-xs text-violet-400 hover:text-violet-300"
-              >
-                <CheckCheck className="h-3.5 w-3.5" />
-                Mark read
-              </button>
-            )}
+            <span className="text-[11px] text-zinc-500">All caught up</span>
           </div>
 
           <div className="max-h-80 divide-y divide-zinc-800/60 overflow-y-auto">
