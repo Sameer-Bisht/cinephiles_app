@@ -6,6 +6,7 @@ export const upsertReviewSchema = z.object({
   content: z.string().trim().max(3000, 'Review must be at most 3000 characters').optional().default(''),
   containsSpoilers: z.boolean().optional().default(false),
   watchedAt: z.coerce.date().optional(),
+  mediaType: z.enum(['movie', 'tv']).optional().default('movie'),
 });
 
 export const createCommentSchema = z.object({

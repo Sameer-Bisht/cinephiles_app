@@ -359,6 +359,7 @@ export function MovieDetailPage() {
       {listModalOpen && (
         <AddToListModal
           tmdbId={tmdbId}
+          mediaType={mediaType}
           movieTitle={movie.title}
           onClose={() => setListModalOpen(false)}
         />

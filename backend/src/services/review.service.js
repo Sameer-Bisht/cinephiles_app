@@ -243,7 +243,7 @@ export const getFollowingFeed = async (userId, { cursor = null, limit = 15 } = {
     .sort({ createdAt: -1 })
     .limit(safeLimit + 1)
     .populate('user', 'username displayName avatarUrl')
-    .populate('movie', 'tmdbId title posterPath releaseYear')
+    .populate('movie', 'tmdbId mediaType title posterPath releaseYear isAnime')
     .lean();
 
   const hasMore = items.length > safeLimit;

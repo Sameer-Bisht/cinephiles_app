@@ -80,7 +80,7 @@ export const getListDetail = async (listId, viewerId, page = 1, limit = 24) => {
       .sort({ addedAt: 1 })
       .skip(skip)
       .limit(safeLimit)
-      .populate('movie', 'tmdbId title posterPath releaseYear runtime')
+      .populate('movie', 'tmdbId mediaType title posterPath releaseYear runtime isAnime')
       .lean(),
     ListItem.countDocuments({ list: listId }),
   ]);
@@ -121,14 +121,14 @@ export const deleteList = async (ownerId, listId) => {
   return { deleted: true };
 };
 
-export const addMovieToList = async (ownerId, listId, { tmdbId, note }) => {
+export const addMovieToList = async (ownerId, listId, { tmdbId, mediaType = 'movie', note }) => {
   const list = await List.findById(listId);
   if (!list) throw new ApiError(404, 'List not found');
   if (!list.owner.equals(ownerId)) {
     throw new ApiError(403, 'You can only modify your own lists');
   }
 
-  const { movie } = await getOrCacheMovieByTmdbId(tmdbId);
+  const { movie } = await getOrCacheMovieByTmdbId(tmdbId, mediaType);
 
   const item = await ListItem.findOneAndUpdate(
     { list: list._id, movie: movie._id },

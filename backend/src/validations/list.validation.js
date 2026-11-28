@@ -14,5 +14,6 @@ export const updateListSchema = z.object({
 
 export const addListItemSchema = z.object({
   tmdbId: z.coerce.number().int().positive('Valid tmdbId is required'),
+  mediaType: z.enum(['movie', 'tv']).optional().default('movie'),
   note: z.string().trim().max(200).optional().default(''),
 });

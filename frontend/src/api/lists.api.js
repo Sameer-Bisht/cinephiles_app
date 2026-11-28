@@ -27,8 +27,8 @@ export const listsApi = {
     const { data } = await api.delete(`/lists/${listId}`);
     return data.data;
   },
-  addItem: async (listId, tmdbId, note = '') => {
-    const { data } = await api.post(`/lists/${listId}/items`, { tmdbId, note });
+  addItem: async (listId, tmdbId, mediaType = 'movie', note = '') => {
+    const { data } = await api.post(`/lists/${listId}/items`, { tmdbId, mediaType, note });
     return data.data.item;
   },
   removeItem: async (listId, tmdbId) => {

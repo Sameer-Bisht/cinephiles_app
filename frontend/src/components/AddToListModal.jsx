@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Check, Plus, X } from 'lucide-react';
 import { listsApi } from '../api/lists.api';
 
-export function AddToListModal({ tmdbId, movieTitle, onClose }) {
+export function AddToListModal({ tmdbId, mediaType = 'movie', movieTitle, onClose }) {
   const queryClient = useQueryClient();
   const [newTitle, setNewTitle] = useState('');
   const [isPublic, setIsPublic] = useState(true);
@@ -15,7 +15,9 @@ export function AddToListModal({ tmdbId, movieTitle, onClose }) {
 
   const toggleMutation = useMutation({
     mutationFn: ({ listId, containsMovie }) =>
-      containsMovie ? listsApi.removeItem(listId, tmdbId) : listsApi.addItem(listId, tmdbId),
+      containsMovie
+        ? listsApi.removeItem(listId, tmdbId)
+        : listsApi.addItem(listId, tmdbId, mediaType),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['lists'] });
     },
@@ -24,7 +26,7 @@ export function AddToListModal({ tmdbId, movieTitle, onClose }) {
   const createMutation = useMutation({
     mutationFn: async () => {
       const created = await listsApi.createList({ title: newTitle.trim(), isPublic });
-      await listsApi.addItem(created._id, tmdbId);
+      await listsApi.addItem(created._id, tmdbId, mediaType);
       return created;
     },
     onSuccess: () => {
