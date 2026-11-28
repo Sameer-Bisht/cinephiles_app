@@ -376,7 +376,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, Check, MessageSquare, Send, User as UserIcon, X } from 'lucide-react';
+import { ArrowLeft, Check, Loader2, MessageSquare, Send, User as UserIcon, X } from 'lucide-react';
 import { chatApi } from '../api/chat.api';
 import { useAuthStore } from '../store/authStore';
 import { useSocketStore } from '../store/socketStore';
@@ -567,17 +567,19 @@ export function ChatPage() {
                 tab === 'inbox' ? 'bg-teal-600 text-white' : 'text-zinc-400 hover:text-white'
               }`}
             >
-              Chats ({inboxConversations.length})
+              Friends Chat ({inboxConversations.length})
             </button>
-            <button
-              type="button"
-              onClick={() => setTab('requests')}
-              className={`flex-1 rounded-lg py-2 transition md:py-1.5 ${
-                tab === 'requests' ? 'bg-teal-600 text-white' : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              Requests ({requestConversations.length})
-            </button>
+            {requestConversations.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setTab('requests')}
+                className={`flex-1 rounded-lg py-2 transition md:py-1.5 ${
+                  tab === 'requests' ? 'bg-teal-600 text-white' : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                Requests ({requestConversations.length})
+              </button>
+            )}
           </div>
 
           <form
@@ -599,9 +601,10 @@ export function ChatPage() {
             <button
               type="submit"
               disabled={startMutation.isPending}
-              className="shrink-0 rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-500 md:px-3 md:py-1.5 md:text-xs"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-500 disabled:opacity-60 md:px-3 md:py-1.5 md:text-xs"
             >
-              Chat
+              {startMutation.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+              {startMutation.isPending ? 'Opening...' : 'Chat'}
             </button>
           </form>
           {startMutation.isError && (

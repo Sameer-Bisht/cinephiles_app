@@ -1,7 +1,7 @@
 ﻿import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AlertTriangle, Heart, MessageCircle, Send, User as UserIcon } from 'lucide-react';
+import { AlertTriangle, Heart, Loader2, MessageCircle, Send, User as UserIcon } from 'lucide-react';
 import { reviewsApi } from '../api/reviews.api';
 
 const VERDICT_BADGE = {
@@ -22,7 +22,7 @@ export function ReviewCard({ review, tmdbId }) {
   const likeMutation = useMutation({
     mutationFn: () => reviewsApi.toggleLike(review._id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reviews', 'movie', String(tmdbId)] });
+      queryClient.invalidateQueries({ queryKey: ['reviews', 'movie'] });
     },
   });
 
@@ -37,7 +37,7 @@ export function ReviewCard({ review, tmdbId }) {
     onSuccess: () => {
       setCommentText('');
       queryClient.invalidateQueries({ queryKey: ['review', review._id, 'comments'] });
-      queryClient.invalidateQueries({ queryKey: ['reviews', 'movie', String(tmdbId)] });
+      queryClient.invalidateQueries({ queryKey: ['reviews', 'movie'] });
     },
   });
 
@@ -67,7 +67,7 @@ export function ReviewCard({ review, tmdbId }) {
               {review.user?.displayName || review.user?.username}
             </p>
             <p className="text-xs text-zinc-500">
-              @{review.user?.username} â€¢ {new Date(review.watchedAt).toLocaleDateString()}
+              @{review.user?.username} • {new Date(review.watchedAt).toLocaleDateString()}
             </p>
           </div>
         </Link>
@@ -108,11 +108,15 @@ export function ReviewCard({ review, tmdbId }) {
           type="button"
           onClick={() => likeMutation.mutate()}
           disabled={likeMutation.isPending}
-          className={`inline-flex items-center gap-1.5 transition hover:text-rose-400 ${
+          className={`inline-flex items-center gap-1.5 transition hover:text-rose-400 disabled:opacity-60 ${
             review.likedByMe ? 'text-rose-400' : ''
           }`}
         >
-          <Heart className={`h-4 w-4 ${review.likedByMe ? 'fill-current' : ''}`} />
+          {likeMutation.isPending ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Heart className={`h-4 w-4 ${review.likedByMe ? 'fill-current' : ''}`} />
+          )}
           <span>{review.likesCount}</span>
         </button>
 

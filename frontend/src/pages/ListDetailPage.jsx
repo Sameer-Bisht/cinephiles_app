@@ -129,7 +129,7 @@ export function ListDetailPage() {
                     <Lock className="h-3.5 w-3.5" /> Private
                   </span>
                 )}
-                <span>â€¢</span>
+                <span>•</span>
                 <span>
                   Curated by{' '}
                   <Link

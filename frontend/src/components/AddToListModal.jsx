@@ -1,6 +1,6 @@
 ﻿import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Check, Plus, X } from 'lucide-react';
+import { Check, Loader2, Plus, X } from 'lucide-react';
 import { listsApi } from '../api/lists.api';
 
 export function AddToListModal({ tmdbId, mediaType = 'movie', movieTitle, onClose }) {
@@ -115,8 +115,12 @@ export function AddToListModal({ tmdbId, mediaType = 'movie', movieTitle, onClos
               disabled={createMutation.isPending || !newTitle.trim()}
               className="inline-flex items-center gap-1 rounded-lg bg-teal-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-teal-500 disabled:opacity-50"
             >
-              <Plus className="h-4 w-4" />
-              Create
+              {createMutation.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Plus className="h-4 w-4" />
+              )}
+              {createMutation.isPending ? 'Creating...' : 'Create'}
             </button>
           </div>
           <label className="flex cursor-pointer items-center gap-2 text-xs text-zinc-400">

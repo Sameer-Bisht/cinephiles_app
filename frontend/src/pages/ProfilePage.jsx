@@ -1,7 +1,7 @@
 ﻿import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Award, Film, Lock, MessageSquare, Settings, Trophy, User as UserIcon, UserCheck, UserPlus, Users } from 'lucide-react';
+import { Award, Film, Loader2, Lock, MessageSquare, Settings, Trophy, User as UserIcon, UserCheck, UserPlus, Users } from 'lucide-react';
 import { socialApi } from '../api/social.api';
 import { listsApi } from '../api/lists.api';
 import { chatApi } from '../api/chat.api';
@@ -193,33 +193,40 @@ export function ProfilePage() {
                 type="button"
                 disabled={followMutation.isPending}
                 onClick={() => followMutation.mutate(relationship.isFollowing)}
-                className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition ${
+                className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition disabled:opacity-60 ${
                   relationship.isFollowing
                     ? 'border border-zinc-700 bg-zinc-950 text-zinc-200 hover:border-rose-500/50 hover:text-rose-300'
                     : 'bg-teal-600 text-white hover:bg-teal-500'
                 }`}
               >
-                {relationship.isFollowing ? (
-                  <>
-                    <UserCheck className="h-4 w-4" />
-                    Following
-                  </>
+                {followMutation.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : relationship.isFollowing ? (
+                  <UserCheck className="h-4 w-4" />
                 ) : (
-                  <>
-                    <UserPlus className="h-4 w-4" />
-                    {relationship.followsMe ? 'Follow back' : 'Follow'}
-                  </>
+                  <UserPlus className="h-4 w-4" />
                 )}
+                {relationship.isFollowing
+                  ? 'Following'
+                  : relationship.followsMe
+                    ? 'Follow back'
+                    : 'Follow'}
               </button>
-              <button
-                type="button"
-                disabled={messageMutation.isPending}
-                onClick={() => messageMutation.mutate()}
-                className="ml-2 inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-2.5 text-sm font-semibold text-zinc-200 transition hover:bg-zinc-800"
-              >
-                <MessageSquare className="h-4 w-4" />
-                Message
-              </button>
+              {relationship.isMutual && (
+                <button
+                  type="button"
+                  disabled={messageMutation.isPending}
+                  onClick={() => messageMutation.mutate()}
+                  className="ml-2 inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-2.5 text-sm font-semibold text-zinc-200 transition hover:bg-zinc-800 disabled:opacity-60"
+                >
+                  {messageMutation.isPending ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <MessageSquare className="h-4 w-4" />
+                  )}
+                  Message
+                </button>
+              )}
             </>
           )}
         </div>
@@ -590,12 +597,16 @@ export function ProfilePage() {
                           currentlyFollowing: u.isFollowingByMe,
                         })
                       }
-                      className={`shrink-0 rounded-xl px-3.5 py-1.5 text-xs font-semibold transition ${
+                      className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-semibold transition disabled:opacity-60 ${
                         u.isFollowingByMe
                           ? 'border border-zinc-700 bg-zinc-950 text-zinc-200 hover:border-rose-500/50 hover:text-rose-300'
                           : 'bg-teal-600 text-white hover:bg-teal-500'
                       }`}
                     >
+                      {followRowMutation.isPending &&
+                        followRowMutation.variables?.targetUsername === u.username && (
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                        )}
                       {u.isFollowingByMe
                         ? 'Following'
                         : isFollowersTab && relationship.isSelf

@@ -59,7 +59,7 @@ export function ListsPage() {
       ) : listsQuery.data?.length === 0 ? (
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-10 text-center space-y-3">
           <p className="text-zinc-400">
-            Organize films your wayâ€”create lists like "Best of Nolan" or "Comfort Movies".
+            Organize films your way—create lists like "Best of Nolan" or "Comfort Movies".
           </p>
           <button
             type="button"

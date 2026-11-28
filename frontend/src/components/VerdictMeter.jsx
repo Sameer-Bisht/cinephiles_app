@@ -17,7 +17,7 @@ export function VerdictMeter({ verdictCounts = {}, totalVotes = 0 }) {
       ? breakdown.reduce((best, curr) => (curr.count > best.count ? curr : best), breakdown[0])
       : null;
 
-  // Semi-circle SVG arc math (radius 70, circumference of half circle = pi * 70 â‰ˆ 219.91)
+  // Semi-circle SVG arc math (radius 70, circumference of half circle = pi * 70 ≈ 219.91)
   const radius = 70;
   const halfCircumference = Math.PI * radius;
   let cumulativeRatio = 0;
@@ -58,7 +58,7 @@ export function VerdictMeter({ verdictCounts = {}, totalVotes = 0 }) {
             </svg>
             <div className="absolute inset-x-0 bottom-1 text-center">
               <div className="text-2xl font-bold text-white">
-                {leading ? `${leading.pct}%` : 'â€”'}
+                {leading ? `${leading.pct}%` : '—'}
               </div>
               <div className={`text-xs font-semibold ${leading ? leading.textClass : 'text-zinc-400'}`}>
                 {leading ? leading.label : 'No votes yet'}

@@ -8,6 +8,7 @@ import {
   Clock,
   Film,
   ListPlus,
+  Loader2,
   Lock,
   PenLine,
   Play,
@@ -118,15 +119,15 @@ export function MovieDetailPage() {
           <div className="flex-1 space-y-3">
             <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-400">
               <span>{movie.isAnime ? 'Anime' : movie.mediaType === 'tv' ? 'TV Series' : 'Movie'}</span>
-              {movie.releaseYear && <span>â€¢ {movie.releaseYear}</span>}
+              {movie.releaseYear && <span>• {movie.releaseYear}</span>}
               {movie.mediaType === 'tv' && movie.numberOfSeasons && (
                 <span>
-                  â€¢ {movie.numberOfSeasons} {movie.numberOfSeasons === 1 ? 'Season' : 'Seasons'}
+                  • {movie.numberOfSeasons} {movie.numberOfSeasons === 1 ? 'Season' : 'Seasons'}
                 </span>
               )}
               {runtimeStr && (
                 <span className="inline-flex items-center gap-1">
-                  â€¢ <Clock className="h-3 w-3" /> {runtimeStr}
+                  • <Clock className="h-3 w-3" /> {runtimeStr}
                 </span>
               )}
               <span className="ml-auto rounded-full border border-zinc-800 bg-zinc-950 px-2.5 py-0.5 text-[11px] text-zinc-500">
@@ -195,7 +196,12 @@ export function MovieDetailPage() {
                       : 'border-zinc-700 bg-zinc-950 text-zinc-200 hover:bg-zinc-800'
                   }`}
                 >
-                  {inWatchlist ? (
+                  {watchlistMutation.isPending ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {inWatchlist ? 'Removing...' : 'Adding...'}
+                    </>
+                  ) : inWatchlist ? (
                     <>
                       <BookmarkCheck className="h-4 w-4" />
                       In Watchlist

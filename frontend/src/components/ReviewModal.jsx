@@ -1,6 +1,6 @@
 ﻿import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Trash2, X } from 'lucide-react';
+import { Loader2, Trash2, X } from 'lucide-react';
 import { reviewsApi } from '../api/reviews.api';
 
 const VERDICT_OPTIONS = [
@@ -142,7 +142,7 @@ export function ReviewModal({ tmdbId, mediaType = 'movie', movieTitle, existingR
                 className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/30 px-3 py-2 text-xs font-medium text-red-300 transition hover:bg-red-500/10 disabled:opacity-50"
               >
                 <Trash2 className="h-3.5 w-3.5" />
-                Delete log
+                {deleteMutation.isPending ? 'Deleting...' : 'Delete log'}
               </button>
             ) : (
               <span />
@@ -159,8 +159,9 @@ export function ReviewModal({ tmdbId, mediaType = 'movie', movieTitle, existingR
               <button
                 type="submit"
                 disabled={saveMutation.isPending}
-                className="rounded-lg bg-teal-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-teal-500 disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-teal-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-teal-500 disabled:opacity-50"
               >
+                {saveMutation.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                 {saveMutation.isPending ? 'Saving...' : 'Save'}
               </button>
             </div>

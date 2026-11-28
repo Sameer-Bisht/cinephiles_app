@@ -34,6 +34,17 @@ export const getOrCreateConversation = async (userId, targetUsername) => {
     throw new ApiError(400, 'Cannot start a conversation with yourself');
   }
 
+  // Check if mutual friends (chat is allowed only between mutual friends)
+  const [aFollowsB, bFollowsA] = await Promise.all([
+    Follow.exists({ follower: userId, following: target._id }),
+    Follow.exists({ follower: target._id, following: userId }),
+  ]);
+  const isMutual = Boolean(aFollowsB && bFollowsA);
+
+  if (!isMutual) {
+    throw new ApiError(403, 'You can only chat with mutual friends. Follow each other first!');
+  }
+
   const participantKey = buildParticipantKey(userId, target._id);
   let conv = await Conversation.findOne({ participantKey }).populate(
     'participants',
@@ -41,38 +52,24 @@ export const getOrCreateConversation = async (userId, targetUsername) => {
   );
 
   if (conv) {
-    if (conv.status === 'declined') {
-      throw new ApiError(403, 'Chat request was declined');
+    if (conv.status !== 'accepted') {
+      conv.status = 'accepted';
+      conv.requestedBy = null;
+      await conv.save();
     }
     return formatConversationForUser(conv, userId);
   }
 
-  // Check if mutual friends
-  const [aFollowsB, bFollowsA] = await Promise.all([
-    Follow.exists({ follower: userId, following: target._id }),
-    Follow.exists({ follower: target._id, following: userId }),
-  ]);
-  const isMutual = Boolean(aFollowsB && bFollowsA);
-
   conv = await Conversation.create({
     participants: [userId, target._id],
     participantKey,
-    status: isMutual ? 'accepted' : 'pending',
-    requestedBy: isMutual ? null : userId,
+    status: 'accepted',
+    requestedBy: null,
     unreadCounts: {
       [userId.toString()]: 0,
       [target._id.toString()]: 0,
     },
   });
-
-  if (!isMutual) {
-    await createNotification({
-      recipientId: target._id,
-      actorId: userId,
-      type: 'chat_request',
-      entityId: conv._id,
-    });
-  }
 
   conv = await conv.populate('participants', 'username displayName avatarUrl');
   return formatConversationForUser(conv, userId);
@@ -165,14 +162,22 @@ export const sendMessage = async (userId, conversationId, text) => {
   const isParticipant = conv.participants.some((p) => p.equals(userId));
   if (!isParticipant) throw new ApiError(403, 'Access denied');
 
-  if (conv.status === 'declined') {
-    throw new ApiError(403, 'Chat request was declined');
-  }
-  if (conv.status === 'pending' && !conv.requestedBy?.equals(userId)) {
-    throw new ApiError(403, 'Accept the chat request before replying');
+  const otherUserId = conv.participants.find((p) => !p.equals(userId)).toString();
+
+  // Ensure users are still mutual friends
+  const [aFollowsB, bFollowsA] = await Promise.all([
+    Follow.exists({ follower: userId, following: otherUserId }),
+    Follow.exists({ follower: otherUserId, following: userId }),
+  ]);
+  if (!aFollowsB || !bFollowsA) {
+    throw new ApiError(403, 'You can only send messages to mutual friends');
   }
 
-  const otherUserId = conv.participants.find((p) => !p.equals(userId)).toString();
+  if (conv.status !== 'accepted') {
+    conv.status = 'accepted';
+    conv.requestedBy = null;
+    await conv.save();
+  }
 
   const message = await Message.create({
     conversation: conversationId,
