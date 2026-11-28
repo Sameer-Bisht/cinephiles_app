@@ -32,16 +32,21 @@ api.interceptors.response.use(
 
       try {
         if (!refreshPromise) {
+          const storedRefresh = localStorage.getItem('reelclub_refresh_token');
           refreshPromise = axios
-            .post(`${API_URL}/auth/refresh`, {}, { withCredentials: true })
+            .post(
+              `${API_URL}/auth/refresh`,
+              storedRefresh ? { refreshToken: storedRefresh } : {},
+              { withCredentials: true }
+            )
             .finally(() => {
               refreshPromise = null;
             });
         }
 
         const res = await refreshPromise;
-        const { user, accessToken } = res.data.data;
-        useAuthStore.getState().setSession(user, accessToken);
+        const { user, accessToken, refreshToken } = res.data.data;
+        useAuthStore.getState().setSession(user, accessToken, refreshToken);
 
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return api(originalRequest);

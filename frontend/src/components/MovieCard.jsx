@@ -4,10 +4,12 @@ import { getPosterUrl } from '../utils/tmdb';
 
 export function MovieCard({ movie }) {
   const posterUrl = getPosterUrl(movie.posterPath, 'w342');
+  const mediaType = movie.mediaType || 'movie';
+  const badgeLabel = movie.isAnime ? 'Anime' : mediaType === 'tv' ? 'TV' : null;
 
   return (
     <Link
-      to={`/movies/${movie.tmdbId}`}
+      to={`/title/${mediaType}/${movie.tmdbId}`}
       className="group flex flex-col overflow-hidden rounded-xl border border-zinc-800/70 bg-zinc-900/40 transition hover:border-violet-500/60 hover:bg-zinc-900"
     >
       <div className="relative aspect-[2/3] w-full overflow-hidden bg-zinc-900">
@@ -23,6 +25,11 @@ export function MovieCard({ movie }) {
             <Film className="h-8 w-8" />
             <span className="text-xs">No Poster</span>
           </div>
+        )}
+        {badgeLabel && (
+          <span className="absolute left-2 top-2 rounded-md bg-violet-600/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
+            {badgeLabel}
+          </span>
         )}
         {movie.releaseYear && (
           <span className="absolute right-2 top-2 rounded-md bg-black/75 px-2 py-0.5 text-xs font-medium text-zinc-200 backdrop-blur-sm">

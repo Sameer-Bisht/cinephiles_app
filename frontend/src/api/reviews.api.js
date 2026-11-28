@@ -1,8 +1,10 @@
 import { api } from './axios';
 
 export const reviewsApi = {
-  getMovieReviews: async (tmdbId, { sort = 'recent', page = 1 } = {}) => {
-    const { data } = await api.get(`/reviews/movies/${tmdbId}`, { params: { sort, page } });
+  getMovieReviews: async (tmdbId, { sort = 'recent', page = 1, mediaType = 'movie' } = {}) => {
+    const { data } = await api.get(`/reviews/movies/${tmdbId}`, {
+      params: { sort, page, type: mediaType },
+    });
     return data.data;
   },
   upsertMovieReview: async (tmdbId, payload) => {

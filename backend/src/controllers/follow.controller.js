@@ -17,7 +17,8 @@ export const getFollowers = asyncHandler(async (req, res) => {
   const data = await followService.getFollowers(
     req.params.username,
     Number(page) || 1,
-    Number(limit) || 20
+    Number(limit) || 20,
+    req.user._id
   );
   return res.status(200).json(new ApiResponse(200, data, 'Followers fetched'));
 });
@@ -27,7 +28,8 @@ export const getFollowing = asyncHandler(async (req, res) => {
   const data = await followService.getFollowing(
     req.params.username,
     Number(page) || 1,
-    Number(limit) || 20
+    Number(limit) || 20,
+    req.user._id
   );
   return res.status(200).json(new ApiResponse(200, data, 'Following fetched'));
 });

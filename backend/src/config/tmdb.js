@@ -4,7 +4,7 @@ import { ApiError } from '../utils/ApiError.js';
 
 export const tmdbClient = axios.create({
   baseURL: 'https://api.themoviedb.org/3',
-  timeout: 8000,
+  timeout: 15000,
 });
 
 tmdbClient.interceptors.request.use((config) => {

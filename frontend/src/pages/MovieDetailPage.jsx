@@ -25,7 +25,7 @@ import { AddToListModal } from '../components/AddToListModal';
 import { formatRuntime, getBackdropUrl, getPosterUrl, getProfileUrl } from '../utils/tmdb';
 
 export function MovieDetailPage() {
-  const { tmdbId } = useParams();
+  const { mediaType = 'movie', tmdbId } = useParams();
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
   const [showTrailer, setShowTrailer] = useState(false);
@@ -34,21 +34,23 @@ export function MovieDetailPage() {
   const [reviewSort, setReviewSort] = useState('recent');
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['movie', tmdbId],
-    queryFn: () => moviesApi.getMovieDetail(tmdbId),
+    queryKey: ['movie', mediaType, tmdbId],
+    queryFn: () => moviesApi.getMovieDetail(tmdbId, mediaType),
   });
 
   const reviewsQuery = useQuery({
-    queryKey: ['reviews', 'movie', tmdbId, reviewSort],
-    queryFn: () => reviewsApi.getMovieReviews(tmdbId, { sort: reviewSort }),
+    queryKey: ['reviews', 'movie', mediaType, tmdbId, reviewSort],
+    queryFn: () => reviewsApi.getMovieReviews(tmdbId, { sort: reviewSort, mediaType }),
     enabled: Boolean(user),
   });
 
   const watchlistMutation = useMutation({
     mutationFn: (currentlyInWatchlist) =>
-      currentlyInWatchlist ? watchlistApi.remove(tmdbId) : watchlistApi.add(tmdbId),
+      currentlyInWatchlist
+        ? watchlistApi.remove(tmdbId, mediaType)
+        : watchlistApi.add(tmdbId, mediaType),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['movie', tmdbId] });
+      queryClient.invalidateQueries({ queryKey: ['movie', mediaType, tmdbId] });
       queryClient.invalidateQueries({ queryKey: ['watchlist'] });
     },
   });
@@ -115,8 +117,13 @@ export function MovieDetailPage() {
 
           <div className="flex-1 space-y-3">
             <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-400">
-              <span>Movie</span>
+              <span>{movie.isAnime ? 'Anime' : movie.mediaType === 'tv' ? 'TV Series' : 'Movie'}</span>
               {movie.releaseYear && <span>• {movie.releaseYear}</span>}
+              {movie.mediaType === 'tv' && movie.numberOfSeasons && (
+                <span>
+                  • {movie.numberOfSeasons} {movie.numberOfSeasons === 1 ? 'Season' : 'Seasons'}
+                </span>
+              )}
               {runtimeStr && (
                 <span className="inline-flex items-center gap-1">
                   • <Clock className="h-3 w-3" /> {runtimeStr}
@@ -136,6 +143,12 @@ export function MovieDetailPage() {
             {movie.director && (
               <p className="text-sm text-zinc-300">
                 Directed by <span className="font-semibold text-white">{movie.director}</span>
+              </p>
+            )}
+            {movie.creators?.length > 0 && (
+              <p className="text-sm text-zinc-300">
+                Created by{' '}
+                <span className="font-semibold text-white">{movie.creators.join(', ')}</span>
               </p>
             )}
 
@@ -335,6 +348,7 @@ export function MovieDetailPage() {
       {reviewModalOpen && (
         <ReviewModal
           tmdbId={tmdbId}
+          mediaType={mediaType}
           movieTitle={movie.title}
           existingReview={myReview}
           onClose={() => setReviewModalOpen(false)}

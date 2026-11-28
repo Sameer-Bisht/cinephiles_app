@@ -12,7 +12,7 @@ export const getMyWatchlist = async (userId, page = 1, limit = 20) => {
       .sort({ addedAt: -1 })
       .skip(skip)
       .limit(safeLimit)
-      .populate('movie', 'tmdbId title posterPath releaseYear runtime')
+      .populate('movie', 'tmdbId mediaType title posterPath releaseYear runtime isAnime')
       .lean(),
     WatchlistItem.countDocuments({ user: userId }),
   ]);
@@ -25,8 +25,8 @@ export const getMyWatchlist = async (userId, page = 1, limit = 20) => {
   };
 };
 
-export const addToWatchlist = async (userId, tmdbId) => {
-  const { movie } = await getOrCacheMovieByTmdbId(tmdbId);
+export const addToWatchlist = async (userId, tmdbId, mediaType = 'movie') => {
+  const { movie } = await getOrCacheMovieByTmdbId(tmdbId, mediaType);
 
   const item = await WatchlistItem.findOneAndUpdate(
     { user: userId, movie: movie._id },
@@ -35,21 +35,22 @@ export const addToWatchlist = async (userId, tmdbId) => {
         user: userId,
         movie: movie._id,
         tmdbId: movie.tmdbId,
+        mediaType: movie.mediaType || mediaType,
         addedAt: new Date(),
       },
     },
     { upsert: true, new: true }
-  ).populate('movie', 'tmdbId title posterPath releaseYear runtime');
+  ).populate('movie', 'tmdbId mediaType title posterPath releaseYear runtime isAnime');
 
   return item;
 };
 
-export const removeFromWatchlist = async (userId, tmdbId) => {
+export const removeFromWatchlist = async (userId, tmdbId, mediaType = 'movie') => {
   const numericId = Number(tmdbId);
   if (!Number.isInteger(numericId) || numericId <= 0) {
-    throw new ApiError(400, 'Invalid TMDB movie ID');
+    throw new ApiError(400, 'Invalid TMDB ID');
   }
 
-  await WatchlistItem.deleteOne({ user: userId, tmdbId: numericId });
-  return { tmdbId: numericId, inWatchlist: false };
+  await WatchlistItem.deleteOne({ user: userId, tmdbId: numericId, mediaType });
+  return { tmdbId: numericId, mediaType, inWatchlist: false };
 };

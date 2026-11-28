@@ -23,8 +23,12 @@ const buildVerdictDelta = (previousVerdict, nextVerdict) => {
   return inc;
 };
 
-export const upsertReview = async (userId, tmdbId, { verdict, content, containsSpoilers, watchedAt }) => {
-  const { movie } = await getOrCacheMovieByTmdbId(tmdbId);
+export const upsertReview = async (
+  userId,
+  tmdbId,
+  { verdict, content, containsSpoilers, watchedAt, mediaType = 'movie' }
+) => {
+  const { movie } = await getOrCacheMovieByTmdbId(tmdbId, mediaType);
   const existing = await Review.findOne({ user: userId, movie: movie._id });
 
   const previousVerdict = existing?.verdict || null;
@@ -102,10 +106,18 @@ export const deleteReview = async (userId, reviewId) => {
   };
 };
 
-export const getMovieReviews = async (tmdbId, { sort = 'recent', page = 1, limit = 10, viewerId }) => {
+export const getMovieReviews = async (
+  tmdbId,
+  { sort = 'recent', page = 1, limit = 10, viewerId, mediaType = 'movie' }
+) => {
   const numericId = Number(tmdbId);
   if (!Number.isInteger(numericId) || numericId <= 0) {
-    throw new ApiError(400, 'Invalid TMDB movie ID');
+    throw new ApiError(400, 'Invalid TMDB ID');
+  }
+
+  const movie = await Movie.findOne({ tmdbId: numericId, mediaType }).select('_id').lean();
+  if (!movie) {
+    return { results: [], page: 1, totalPages: 1, totalResults: 0 };
   }
 
   const safeLimit = Math.min(Math.max(limit, 1), 50);
@@ -114,13 +126,13 @@ export const getMovieReviews = async (tmdbId, { sort = 'recent', page = 1, limit
   const sortOrder = sort === 'likes' ? { likesCount: -1, createdAt: -1 } : { createdAt: -1 };
 
   const [reviews, total] = await Promise.all([
-    Review.find({ tmdbId: numericId })
+    Review.find({ movie: movie._id })
       .sort(sortOrder)
       .skip(skip)
       .limit(safeLimit)
       .populate('user', 'username displayName avatarUrl')
       .lean(),
-    Review.countDocuments({ tmdbId: numericId }),
+    Review.countDocuments({ movie: movie._id }),
   ]);
 
   let likedSet = new Set();

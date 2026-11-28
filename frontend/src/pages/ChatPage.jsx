@@ -493,10 +493,19 @@ export function ChatPage() {
   const respondMutation = useMutation({
     mutationFn: ({ conversationId, action }) => chatApi.respondToRequest(conversationId, action),
     onSuccess: (conv, vars) => {
+      queryClient.setQueryData(['chat', 'conversations'], (old = []) => {
+        if (vars.action === 'decline') {
+          return old.filter((c) => c._id !== vars.conversationId);
+        }
+        return old.map((c) => (c._id === conv._id ? { ...c, ...conv, status: 'accepted' } : c));
+      });
       queryClient.invalidateQueries({ queryKey: ['chat', 'conversations'] });
       if (vars.action === 'accept') {
         setTab('inbox');
         setActiveId(conv._id);
+        if (socket) {
+          socket.emit('chat:join', { conversationId: conv._id });
+        }
       } else {
         setActiveId(null);
       }

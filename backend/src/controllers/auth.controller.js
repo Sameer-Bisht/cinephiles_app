@@ -7,7 +7,7 @@ export const register = asyncHandler(async (req, res) => {
   res.cookie('refreshToken', refreshToken, authService.refreshCookieOptions);
   return res
     .status(201)
-    .json(new ApiResponse(201, { user, accessToken }, 'Account created successfully'));
+    .json(new ApiResponse(201, { user, accessToken, refreshToken }, 'Account created successfully'));
 });
 
 export const login = asyncHandler(async (req, res) => {
@@ -15,21 +15,21 @@ export const login = asyncHandler(async (req, res) => {
   res.cookie('refreshToken', refreshToken, authService.refreshCookieOptions);
   return res
     .status(200)
-    .json(new ApiResponse(200, { user, accessToken }, 'Logged in successfully'));
+    .json(new ApiResponse(200, { user, accessToken, refreshToken }, 'Logged in successfully'));
 });
 
 export const refresh = asyncHandler(async (req, res) => {
-  const { user, accessToken, refreshToken } = await authService.refreshSession(
-    req.cookies?.refreshToken
-  );
+  const incomingToken = req.cookies?.refreshToken || req.body?.refreshToken;
+  const { user, accessToken, refreshToken } = await authService.refreshSession(incomingToken);
   res.cookie('refreshToken', refreshToken, authService.refreshCookieOptions);
   return res
     .status(200)
-    .json(new ApiResponse(200, { user, accessToken }, 'Session refreshed'));
+    .json(new ApiResponse(200, { user, accessToken, refreshToken }, 'Session refreshed'));
 });
 
 export const logout = asyncHandler(async (req, res) => {
-  await authService.logoutUser(req.user?._id);
+  const incomingToken = req.cookies?.refreshToken || req.body?.refreshToken;
+  await authService.logoutUser(req.user?._id, incomingToken);
   res.clearCookie('refreshToken', {
     ...authService.refreshCookieOptions,
     maxAge: undefined,

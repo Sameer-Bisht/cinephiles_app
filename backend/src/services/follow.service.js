@@ -43,7 +43,25 @@ export const unfollowUser = async (followerId, targetUsername) => {
   return { isFollowing: false, isMutual: false };
 };
 
-export const getFollowers = async (username, page = 1, limit = 20) => {
+const annotateFollowState = async (users, viewerId) => {
+  if (!viewerId || users.length === 0) return users;
+  const targetIds = users.map((u) => u._id);
+  const viewerFollows = await Follow.find({
+    follower: viewerId,
+    following: { $in: targetIds },
+  })
+    .select('following')
+    .lean();
+
+  const followingSet = new Set(viewerFollows.map((f) => f.following.toString()));
+  return users.map((u) => ({
+    ...u,
+    isFollowingByMe: followingSet.has(u._id.toString()),
+    isSelf: u._id.toString() === viewerId.toString(),
+  }));
+};
+
+export const getFollowers = async (username, page = 1, limit = 20, viewerId = null) => {
   const user = await User.findOne({ username: username.toLowerCase() }).select('_id');
   if (!user) throw new ApiError(404, 'User not found');
 
@@ -61,15 +79,18 @@ export const getFollowers = async (username, page = 1, limit = 20) => {
     Follow.countDocuments({ following: user._id }),
   ]);
 
+  const rawUsers = edges.map((e) => e.follower).filter(Boolean);
+  const results = await annotateFollowState(rawUsers, viewerId);
+
   return {
-    results: edges.map((e) => e.follower).filter(Boolean),
+    results,
     page: safePage,
     totalPages: Math.ceil(total / safeLimit) || 1,
     totalResults: total,
   };
 };
 
-export const getFollowing = async (username, page = 1, limit = 20) => {
+export const getFollowing = async (username, page = 1, limit = 20, viewerId = null) => {
   const user = await User.findOne({ username: username.toLowerCase() }).select('_id');
   if (!user) throw new ApiError(404, 'User not found');
 
@@ -87,8 +108,11 @@ export const getFollowing = async (username, page = 1, limit = 20) => {
     Follow.countDocuments({ follower: user._id }),
   ]);
 
+  const rawUsers = edges.map((e) => e.following).filter(Boolean);
+  const results = await annotateFollowState(rawUsers, viewerId);
+
   return {
-    results: edges.map((e) => e.following).filter(Boolean),
+    results,
     page: safePage,
     totalPages: Math.ceil(total / safeLimit) || 1,
     totalResults: total,

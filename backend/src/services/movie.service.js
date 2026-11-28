@@ -250,6 +250,7 @@ export const searchMedia = async (query, page = 1, type = 'all') => {
     };
   } catch (error) {
     if (error instanceof ApiError) throw error;
+    console.error('TMDB search error:', error.response?.status, error.message);
     throw new ApiError(502, 'Failed to fetch search results from TMDB');
   }
 };
@@ -292,6 +293,7 @@ export const getTrendingMedia = async (page = 1, type = 'all') => {
     };
   } catch (error) {
     if (error instanceof ApiError) throw error;
+    console.error('TMDB trending error:', error.response?.status, error.message);
     throw new ApiError(502, 'Failed to fetch trending titles from TMDB');
   }
 };
@@ -336,6 +338,7 @@ export const getOrCacheMediaByTmdbId = async (tmdbId, mediaType = 'movie') => {
     if (error.response?.status === 404) {
       throw new ApiError(404, `${mediaType === 'tv' ? 'Series' : 'Movie'} not found on TMDB`);
     }
+    console.error('TMDB detail error:', mediaType, numericId, error.response?.status, error.message);
     // If TMDB is temporarily down but we have a stale cache, fall back gracefully
     if (cached) {
       return { movie: cached, source: 'stale-cache' };

@@ -13,11 +13,13 @@ export const getMyWatchlist = asyncHandler(async (req, res) => {
 });
 
 export const addToWatchlist = asyncHandler(async (req, res) => {
-  const item = await watchlistService.addToWatchlist(req.user._id, req.params.tmdbId);
+  const mediaType = req.query.type || req.body?.mediaType || 'movie';
+  const item = await watchlistService.addToWatchlist(req.user._id, req.params.tmdbId, mediaType);
   return res.status(201).json(new ApiResponse(201, { item }, 'Added to watchlist'));
 });
 
 export const removeFromWatchlist = asyncHandler(async (req, res) => {
-  const data = await watchlistService.removeFromWatchlist(req.user._id, req.params.tmdbId);
+  const mediaType = req.query.type || 'movie';
+  const data = await watchlistService.removeFromWatchlist(req.user._id, req.params.tmdbId, mediaType);
   return res.status(200).json(new ApiResponse(200, data, 'Removed from watchlist'));
 });

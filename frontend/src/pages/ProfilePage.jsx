@@ -45,6 +45,30 @@ export function ProfilePage() {
     enabled: activeTab === 'lists',
   });
 
+  const followersQuery = useQuery({
+    queryKey: ['profile', username, 'followers'],
+    queryFn: () => socialApi.getFollowers(username, 1),
+    enabled: activeTab === 'followers',
+  });
+
+  const followingQuery = useQuery({
+    queryKey: ['profile', username, 'following'],
+    queryFn: () => socialApi.getFollowing(username, 1),
+    enabled: activeTab === 'following',
+  });
+
+  const followRowMutation = useMutation({
+    mutationFn: ({ targetUsername, currentlyFollowing }) =>
+      currentlyFollowing ? socialApi.unfollow(targetUsername) : socialApi.follow(targetUsername),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile', username] });
+      queryClient.invalidateQueries({ queryKey: ['profile', username, 'followers'] });
+      queryClient.invalidateQueries({ queryKey: ['profile', username, 'following'] });
+      queryClient.invalidateQueries({ queryKey: ['friends'] });
+      queryClient.invalidateQueries({ queryKey: ['feed'] });
+    },
+  });
+
   const followMutation = useMutation({
     mutationFn: (currentlyFollowing) =>
       currentlyFollowing ? socialApi.unfollow(username) : socialApi.follow(username),
@@ -109,15 +133,27 @@ export function ProfilePage() {
             {profileUser.bio && <p className="max-w-xl text-sm text-zinc-300">{profileUser.bio}</p>}
 
             <div className="flex flex-wrap gap-5 pt-1 text-sm text-zinc-400">
-              <span>
+              <button
+                type="button"
+                onClick={() => setActiveTab('reviews')}
+                className="hover:text-white transition"
+              >
                 <strong className="text-white">{stats.reviewsCount}</strong> Reviews
-              </span>
-              <span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('followers')}
+                className="hover:text-white transition"
+              >
                 <strong className="text-white">{profileUser.followersCount}</strong> Followers
-              </span>
-              <span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('following')}
+                className="hover:text-white transition"
+              >
                 <strong className="text-white">{profileUser.followingCount}</strong> Following
-              </span>
+              </button>
             </div>
           </div>
         </div>
@@ -170,7 +206,7 @@ export function ProfilePage() {
       </section>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-zinc-800 pb-3">
+      <div className="flex flex-wrap gap-2 border-b border-zinc-800 pb-3">
         <button
           type="button"
           onClick={() => setActiveTab('reviews')}
@@ -204,6 +240,28 @@ export function ProfilePage() {
         >
           Lists
         </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('followers')}
+          className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+            activeTab === 'followers'
+              ? 'bg-violet-600 text-white'
+              : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
+          }`}
+        >
+          Followers ({profileUser.followersCount})
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('following')}
+          className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+            activeTab === 'following'
+              ? 'bg-violet-600 text-white'
+              : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
+          }`}
+        >
+          Following ({profileUser.followingCount})
+        </button>
       </div>
 
       {/* Tab Content */}
@@ -227,7 +285,7 @@ export function ProfilePage() {
                   className="flex gap-4 rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-4"
                 >
                   <Link
-                    to={`/movies/${review.tmdbId}`}
+                    to={`/title/${review.movie?.mediaType || 'movie'}/${review.tmdbId}`}
                     className="w-16 shrink-0 overflow-hidden rounded-lg bg-zinc-900"
                   >
                     {posterUrl ? (
@@ -245,7 +303,7 @@ export function ProfilePage() {
                   <div className="flex-1 space-y-1.5">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <Link
-                        to={`/movies/${review.tmdbId}`}
+                        to={`/title/${review.movie?.mediaType || 'movie'}/${review.tmdbId}`}
                         className="font-semibold text-white hover:text-violet-300"
                       >
                         {review.movie?.title}{' '}
@@ -291,20 +349,101 @@ export function ProfilePage() {
             ))}
           </div>
         )
-      ) : listsQuery.isLoading ? (
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-52 animate-pulse rounded-2xl bg-zinc-900" />
-          ))}
-        </div>
-      ) : listsQuery.data?.length === 0 ? (
-        <p className="text-sm text-zinc-400">No lists to show.</p>
+      ) : activeTab === 'lists' ? (
+        listsQuery.isLoading ? (
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-52 animate-pulse rounded-2xl bg-zinc-900" />
+            ))}
+          </div>
+        ) : listsQuery.data?.length === 0 ? (
+          <p className="text-sm text-zinc-400">No lists to show.</p>
+        ) : (
+          <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
+            {listsQuery.data?.map((list) => (
+              <ListCard key={list._id} list={list} />
+            ))}
+          </div>
+        )
       ) : (
-        <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
-          {listsQuery.data?.map((list) => (
-            <ListCard key={list._id} list={list} />
-          ))}
-        </div>
+        (() => {
+          const isFollowersTab = activeTab === 'followers';
+          const listQuery = isFollowersTab ? followersQuery : followingQuery;
+          const users = listQuery.data?.results || [];
+
+          if (listQuery.isLoading) {
+            return (
+              <div className="space-y-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="h-16 animate-pulse rounded-2xl bg-zinc-900" />
+                ))}
+              </div>
+            );
+          }
+
+          if (users.length === 0) {
+            return (
+              <p className="text-sm text-zinc-400">
+                {isFollowersTab ? 'No followers yet.' : 'Not following anyone yet.'}
+              </p>
+            );
+          }
+
+          return (
+            <div className="grid gap-3 sm:grid-cols-2">
+              {users.map((u) => (
+                <div
+                  key={u._id}
+                  className="flex items-center justify-between gap-3 rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-4"
+                >
+                  <Link to={`/u/${u.username}`} className="flex min-w-0 items-center gap-3">
+                    {u.avatarUrl ? (
+                      <img
+                        src={u.avatarUrl}
+                        alt={u.displayName}
+                        className="h-11 w-11 shrink-0 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-zinc-800 text-zinc-400">
+                        <UserIcon className="h-5 w-5" />
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-white">
+                        {u.displayName || u.username}
+                      </p>
+                      <p className="truncate text-xs text-zinc-400">@{u.username}</p>
+                    </div>
+                  </Link>
+
+                  {!u.isSelf && (
+                    <button
+                      type="button"
+                      disabled={followRowMutation.isPending}
+                      onClick={() =>
+                        followRowMutation.mutate({
+                          targetUsername: u.username,
+                          currentlyFollowing: u.isFollowingByMe,
+                        })
+                      }
+                      className={`shrink-0 rounded-xl px-3.5 py-1.5 text-xs font-semibold transition ${
+                        u.isFollowingByMe
+                          ? 'border border-zinc-700 bg-zinc-950 text-zinc-200 hover:border-rose-500/50 hover:text-rose-300'
+                          : 'bg-violet-600 text-white hover:bg-violet-500'
+                      }`}
+                    >
+                      {u.isFollowingByMe
+                        ? 'Following'
+                        : isFollowersTab && relationship.isSelf
+                          ? 'Follow back'
+                          : 'Follow'}
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          );
+        })()
       )}
     </div>
   );

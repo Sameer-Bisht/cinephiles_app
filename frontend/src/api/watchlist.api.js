@@ -5,12 +5,12 @@ export const watchlistApi = {
     const { data } = await api.get('/watchlist', { params: { page } });
     return data.data;
   },
-  add: async (tmdbId) => {
-    const { data } = await api.post(`/watchlist/${tmdbId}`);
+  add: async (tmdbId, mediaType = 'movie') => {
+    const { data } = await api.post(`/watchlist/${tmdbId}`, { mediaType });
     return data.data.item;
   },
-  remove: async (tmdbId) => {
-    const { data } = await api.delete(`/watchlist/${tmdbId}`);
+  remove: async (tmdbId, mediaType = 'movie') => {
+    const { data } = await api.delete(`/watchlist/${tmdbId}`, { params: { type: mediaType } });
     return data.data;
   },
 };

@@ -1,20 +1,32 @@
 import { api } from './axios';
 
+const REFRESH_KEY = 'reelclub_refresh_token';
+
+const persistRefreshToken = (data) => {
+  if (data?.refreshToken) {
+    localStorage.setItem(REFRESH_KEY, data.refreshToken);
+  }
+  return data;
+};
+
 export const authApi = {
   register: async (payload) => {
     const { data } = await api.post('/auth/register', payload);
-    return data.data;
+    return persistRefreshToken(data.data);
   },
   login: async (payload) => {
     const { data } = await api.post('/auth/login', payload);
-    return data.data;
+    return persistRefreshToken(data.data);
   },
   refresh: async () => {
-    const { data } = await api.post('/auth/refresh');
-    return data.data;
+    const refreshToken = localStorage.getItem(REFRESH_KEY);
+    const { data } = await api.post('/auth/refresh', refreshToken ? { refreshToken } : {});
+    return persistRefreshToken(data.data);
   },
   logout: async () => {
-    await api.post('/auth/logout');
+    const refreshToken = localStorage.getItem(REFRESH_KEY);
+    localStorage.removeItem(REFRESH_KEY);
+    await api.post('/auth/logout', refreshToken ? { refreshToken } : {});
   },
   updateProfile: async (payload) => {
     const { data } = await api.patch('/users/me', payload);

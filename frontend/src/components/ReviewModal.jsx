@@ -10,7 +10,7 @@ const VERDICT_OPTIONS = [
   { key: 'masterpiece', label: 'Masterpiece', activeClass: 'border-violet-500 bg-violet-500/20 text-violet-300' },
 ];
 
-export function ReviewModal({ tmdbId, movieTitle, existingReview, onClose }) {
+export function ReviewModal({ tmdbId, mediaType = 'movie', movieTitle, existingReview, onClose }) {
   const queryClient = useQueryClient();
   const [verdict, setVerdict] = useState(existingReview?.verdict || null);
   const [content, setContent] = useState(existingReview?.content || '');
@@ -19,8 +19,8 @@ export function ReviewModal({ tmdbId, movieTitle, existingReview, onClose }) {
   );
 
   const invalidate = () => {
-    queryClient.invalidateQueries({ queryKey: ['movie', String(tmdbId)] });
-    queryClient.invalidateQueries({ queryKey: ['reviews', 'movie', String(tmdbId)] });
+    queryClient.invalidateQueries({ queryKey: ['movie', mediaType, String(tmdbId)] });
+    queryClient.invalidateQueries({ queryKey: ['reviews', 'movie', mediaType, String(tmdbId)] });
     queryClient.invalidateQueries({ queryKey: ['watchlist'] });
   };
 
@@ -46,6 +46,7 @@ export function ReviewModal({ tmdbId, movieTitle, existingReview, onClose }) {
       verdict,
       content,
       containsSpoilers,
+      mediaType,
     });
   };
 

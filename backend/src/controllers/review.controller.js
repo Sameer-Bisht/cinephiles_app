@@ -3,7 +3,11 @@ import { ApiResponse } from '../utils/ApiResponse.js';
 import * as reviewService from '../services/review.service.js';
 
 export const upsertMovieReview = asyncHandler(async (req, res) => {
-  const result = await reviewService.upsertReview(req.user._id, req.params.tmdbId, req.body);
+  const mediaType = req.query.type || req.body?.mediaType || 'movie';
+  const result = await reviewService.upsertReview(req.user._id, req.params.tmdbId, {
+    ...req.body,
+    mediaType,
+  });
   return res.status(200).json(new ApiResponse(200, result, 'Review saved'));
 });
 
@@ -13,12 +17,13 @@ export const deleteReview = asyncHandler(async (req, res) => {
 });
 
 export const getMovieReviews = asyncHandler(async (req, res) => {
-  const { sort = 'recent', page = 1, limit = 10 } = req.query;
+  const { sort = 'recent', page = 1, limit = 10, type = 'movie' } = req.query;
   const result = await reviewService.getMovieReviews(req.params.tmdbId, {
     sort,
     page: Number(page) || 1,
     limit: Number(limit) || 10,
     viewerId: req.user._id,
+    mediaType: type,
   });
   return res.status(200).json(new ApiResponse(200, result, 'Movie reviews fetched'));
 });
