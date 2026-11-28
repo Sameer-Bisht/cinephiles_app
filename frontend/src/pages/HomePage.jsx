@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Flame, Search } from 'lucide-react';
@@ -24,7 +24,7 @@ export function HomePage() {
 
   return (
     <div className="space-y-8 sm:space-y-10">
-      <section className="rounded-2xl border border-zinc-800/80 bg-gradient-to-br from-zinc-900 via-zinc-950 to-violet-950/30 p-6 sm:p-10">
+      <section className="rounded-2xl border border-slate-800/80 bg-gradient-to-br from-slate-900 via-[#0d121c] to-teal-950/40 p-6 sm:p-10">
         <div className="max-w-2xl space-y-4">
           <h1 className="text-2xl font-bold tracking-tight text-white sm:text-4xl">
             {user
@@ -38,7 +38,7 @@ export function HomePage() {
           <div className="flex flex-wrap gap-3 pt-1">
             <Link
               to="/search"
-              className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-violet-500"
+              className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-teal-500"
             >
               <Search className="h-4 w-4" />
               Search Titles
@@ -58,7 +58,7 @@ export function HomePage() {
       <section className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Flame className="h-5 w-5 text-violet-400" />
+            <Flame className="h-5 w-5 text-teal-400" />
             <h2 className="text-xl font-bold text-white">Trending This Week</h2>
           </div>
 
@@ -70,7 +70,7 @@ export function HomePage() {
                 onClick={() => setMediaFilter(f.key)}
                 className={`rounded-lg px-3 py-1.5 font-medium transition ${
                   mediaFilter === f.key
-                    ? 'bg-violet-600 text-white'
+                    ? 'bg-teal-600 text-white'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >

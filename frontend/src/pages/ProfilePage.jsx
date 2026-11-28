@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Award, Film, Lock, MessageSquare, Settings, Trophy, User as UserIcon, UserCheck, UserPlus, Users } from 'lucide-react';
@@ -196,7 +196,7 @@ export function ProfilePage() {
                 className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition ${
                   relationship.isFollowing
                     ? 'border border-zinc-700 bg-zinc-950 text-zinc-200 hover:border-rose-500/50 hover:text-rose-300'
-                    : 'bg-violet-600 text-white hover:bg-violet-500'
+                    : 'bg-teal-600 text-white hover:bg-teal-500'
                 }`}
               >
                 {relationship.isFollowing ? (
@@ -232,7 +232,7 @@ export function ProfilePage() {
           onClick={() => setActiveTab('reviews')}
           className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
             activeTab === 'reviews'
-              ? 'bg-violet-600 text-white'
+              ? 'bg-teal-600 text-white'
               : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
           }`}
         >
@@ -243,7 +243,7 @@ export function ProfilePage() {
           onClick={() => setActiveTab('watchlog')}
           className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
             activeTab === 'watchlog'
-              ? 'bg-violet-600 text-white'
+              ? 'bg-teal-600 text-white'
               : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
           }`}
         >
@@ -255,7 +255,7 @@ export function ProfilePage() {
             onClick={() => setActiveTab('watchlist')}
             className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition ${
               activeTab === 'watchlist'
-                ? 'bg-violet-600 text-white'
+                ? 'bg-teal-600 text-white'
                 : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
             }`}
           >
@@ -268,7 +268,7 @@ export function ProfilePage() {
           onClick={() => setActiveTab('lists')}
           className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
             activeTab === 'lists'
-              ? 'bg-violet-600 text-white'
+              ? 'bg-teal-600 text-white'
               : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
           }`}
         >
@@ -279,7 +279,7 @@ export function ProfilePage() {
           onClick={() => setActiveTab('followers')}
           className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
             activeTab === 'followers'
-              ? 'bg-violet-600 text-white'
+              ? 'bg-teal-600 text-white'
               : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
           }`}
         >
@@ -290,7 +290,7 @@ export function ProfilePage() {
           onClick={() => setActiveTab('following')}
           className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
             activeTab === 'following'
-              ? 'bg-violet-600 text-white'
+              ? 'bg-teal-600 text-white'
               : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
           }`}
         >
@@ -338,7 +338,7 @@ export function ProfilePage() {
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <Link
                         to={`/title/${review.movie?.mediaType || 'movie'}/${review.tmdbId}`}
-                        className="font-semibold text-white hover:text-violet-300"
+                        className="font-semibold text-white hover:text-teal-300"
                       >
                         {review.movie?.title}{' '}
                         {review.movie?.releaseYear && (
@@ -426,9 +426,9 @@ export function ProfilePage() {
                       <span
                         key={ach.key}
                         title={ach.desc}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-xs font-medium text-violet-200"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/10 px-3 py-1 text-xs font-medium text-teal-200"
                       >
-                        <Award className="h-3.5 w-3.5 text-violet-400" />
+                        <Award className="h-3.5 w-3.5 text-teal-400" />
                         {ach.label}
                       </span>
                     ))}
@@ -451,7 +451,7 @@ export function ProfilePage() {
                     onClick={() => setWatchlogPeriod(p.key)}
                     className={`rounded-lg px-3 py-1.5 font-medium transition ${
                       watchlogPeriod === p.key
-                        ? 'bg-violet-600 text-white'
+                        ? 'bg-teal-600 text-white'
                         : 'text-zinc-400 hover:text-white'
                     }`}
                   >
@@ -471,7 +471,7 @@ export function ProfilePage() {
                     onClick={() => setWatchlogSort(s.key)}
                     className={`rounded-lg px-3 py-1.5 font-medium transition ${
                       watchlogSort === s.key
-                        ? 'bg-violet-600 text-white'
+                        ? 'bg-teal-600 text-white'
                         : 'text-zinc-400 hover:text-white'
                     }`}
                   >
@@ -593,7 +593,7 @@ export function ProfilePage() {
                       className={`shrink-0 rounded-xl px-3.5 py-1.5 text-xs font-semibold transition ${
                         u.isFollowingByMe
                           ? 'border border-zinc-700 bg-zinc-950 text-zinc-200 hover:border-rose-500/50 hover:text-rose-300'
-                          : 'bg-violet-600 text-white hover:bg-violet-500'
+                          : 'bg-teal-600 text-white hover:bg-teal-500'
                       }`}
                     >
                       {u.isFollowingByMe

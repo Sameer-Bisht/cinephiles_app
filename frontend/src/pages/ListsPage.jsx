@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ListVideo, Plus, X } from 'lucide-react';
 import { listsApi } from '../api/lists.api';
@@ -37,13 +37,13 @@ export function ListsPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2.5">
-          <ListVideo className="h-5 w-5 text-violet-400" />
+          <ListVideo className="h-5 w-5 text-teal-400" />
           <h1 className="text-2xl font-bold text-white">Your Custom Lists</h1>
         </div>
         <button
           type="button"
           onClick={() => setShowCreate(true)}
-          className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-500"
+          className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-500"
         >
           <Plus className="h-4 w-4" />
           New List
@@ -59,12 +59,12 @@ export function ListsPage() {
       ) : listsQuery.data?.length === 0 ? (
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-10 text-center space-y-3">
           <p className="text-zinc-400">
-            Organize films your way—create lists like "Best of Nolan" or "Comfort Movies".
+            Organize films your wayâ€”create lists like "Best of Nolan" or "Comfort Movies".
           </p>
           <button
             type="button"
             onClick={() => setShowCreate(true)}
-            className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-500"
+            className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-500"
           >
             Create your first list
           </button>
@@ -107,7 +107,7 @@ export function ListsPage() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Comfort Movies"
-                  className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none"
+                  className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none"
                 />
               </div>
 
@@ -121,7 +121,7 @@ export function ListsPage() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Movies I can rewatch any day..."
-                  className="w-full rounded-xl border border-zinc-800 bg-zinc-900 p-3 text-sm text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none"
+                  className="w-full rounded-xl border border-zinc-800 bg-zinc-900 p-3 text-sm text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none"
                 />
               </div>
 
@@ -130,7 +130,7 @@ export function ListsPage() {
                   type="checkbox"
                   checked={isPublic}
                   onChange={(e) => setIsPublic(e.target.checked)}
-                  className="h-4 w-4 accent-violet-600"
+                  className="h-4 w-4 accent-teal-600"
                 />
                 <span>Public list (visible on your profile)</span>
               </label>
@@ -146,7 +146,7 @@ export function ListsPage() {
                 <button
                   type="submit"
                   disabled={createMutation.isPending}
-                  className="rounded-lg bg-violet-600 px-5 py-2 text-sm font-semibold text-white hover:bg-violet-500 disabled:opacity-50"
+                  className="rounded-lg bg-teal-600 px-5 py-2 text-sm font-semibold text-white hover:bg-teal-500 disabled:opacity-50"
                 >
                   {createMutation.isPending ? 'Creating...' : 'Create List'}
                 </button>

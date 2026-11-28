@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Camera, User as UserIcon } from 'lucide-react';
 import { authApi } from '../api/auth.api';
@@ -94,7 +94,7 @@ export function SettingsPage() {
             maxLength={50}
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3.5 py-2.5 text-sm text-white focus:border-violet-500 focus:outline-none"
+            className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3.5 py-2.5 text-sm text-white focus:border-teal-500 focus:outline-none"
           />
         </div>
 
@@ -106,7 +106,7 @@ export function SettingsPage() {
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             placeholder="Tell other cinephiles what you love..."
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none"
+            className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none"
           />
           <p className="mt-1 text-right text-xs text-zinc-500">{bio.length}/200</p>
         </div>
@@ -121,7 +121,7 @@ export function SettingsPage() {
         <button
           type="submit"
           disabled={profileMutation.isPending}
-          className="rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500 disabled:opacity-50"
+          className="rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-500 disabled:opacity-50"
         >
           {profileMutation.isPending ? 'Saving...' : 'Save changes'}
         </button>

@@ -1,4 +1,4 @@
-// import { useState } from 'react';
+﻿// import { useState } from 'react';
 // import { Link, useNavigate } from 'react-router-dom';
 // import { Bookmark, Film, ListVideo, LogOut, MessageSquare, Search, Users, User as UserIcon } from 'lucide-react';
 // import { useAuthStore } from '../store/authStore';
@@ -35,7 +35,7 @@
 //     <header className="sticky top-0 z-40 border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-md">
 //       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
 //         <Link to="/" className="flex shrink-0 items-center gap-2 text-lg font-bold tracking-tight text-white">
-//           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600 text-white">
+//           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-600 text-white">
 //             <Film className="h-4 w-4" />
 //           </span>
 //           <span className="hidden sm:inline">ReelClub</span>
@@ -48,7 +48,7 @@
 //             value={searchTerm}
 //             onChange={(e) => setSearchTerm(e.target.value)}
 //             placeholder="Search movies..."
-//             className="w-full rounded-full border border-zinc-800 bg-zinc-900 py-1.5 pl-9 pr-4 text-sm text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none"
+//             className="w-full rounded-full border border-zinc-800 bg-zinc-900 py-1.5 pl-9 pr-4 text-sm text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none"
 //           />
 //         </form>
 
@@ -66,7 +66,7 @@
 //                 to="/watchlist"
 //                 className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-zinc-300 transition hover:bg-zinc-900 hover:text-white"
 //               >
-//                 <Bookmark className="h-4 w-4 text-violet-400" />
+//                 <Bookmark className="h-4 w-4 text-teal-400" />
 //                 <span className="hidden md:inline">Watchlist</span>
 //               </Link>
 //               <Link
@@ -118,7 +118,7 @@
 //               </Link>
 //               <Link
 //                 to="/register"
-//                 className="rounded-lg bg-violet-600 px-3.5 py-1.5 text-sm font-medium text-white transition hover:bg-violet-500"
+//                 className="rounded-lg bg-teal-600 px-3.5 py-1.5 text-sm font-medium text-white transition hover:bg-teal-500"
 //               >
 //                 Sign up
 //               </Link>
@@ -154,10 +154,11 @@ import {
 import { useAuthStore } from '../store/authStore';
 import { authApi } from '../api/auth.api';
 import { NotificationBell } from './NotificationBell';
+import { CinephilesLogo } from './CinephilesLogo';
 
 const NAV_LINKS = [
   { to: '/community', label: 'Community', icon: Users, color: 'text-emerald-400' },
-  { to: '/watchlist', label: 'Watchlist', icon: Bookmark, color: 'text-violet-400' },
+  { to: '/watchlist', label: 'Watchlist', icon: Bookmark, color: 'text-teal-400' },
   { to: '/lists', label: 'Lists', icon: ListVideo, color: 'text-amber-400' },
   { to: '/chat', label: 'Chat', icon: MessageSquare, color: 'text-sky-400' },
 ];
@@ -173,7 +174,7 @@ function SearchForm({ value, onChange, onSubmit, className = '' }) {
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search movies..."
         aria-label="Search movies"
-        className="w-full rounded-full border border-zinc-800 bg-zinc-900 py-2 pl-9 pr-4 text-sm text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none md:py-1.5"
+        className="w-full rounded-full border border-zinc-800 bg-zinc-900 py-2 pl-9 pr-4 text-sm text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none md:py-1.5"
       />
     </form>
   );
@@ -230,19 +231,16 @@ export function Navbar() {
     'flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-zinc-300 transition hover:bg-zinc-900 hover:text-white lg:px-3';
 
   return (
-    <header className="sticky top-0 z-40 border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-[#0a0d14]/90 backdrop-blur-md">
       <div className="mx-auto max-w-6xl px-4">
         {/* Main row */}
         <div className="flex h-14 items-center gap-3 md:h-16 md:gap-4">
           <Link
             to="/"
             onClick={closeMenu}
-            className="flex shrink-0 items-center gap-2 text-lg font-bold tracking-tight text-white"
+            className="flex shrink-0 items-center"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600 text-white">
-              <Film className="h-4 w-4" />
-            </span>
-            <span>ReelClub</span>
+            <CinephilesLogo />
           </Link>
 
           {/* Search: inline on md+, separate row on mobile (below) */}
@@ -307,7 +305,7 @@ export function Navbar() {
                 </Link>
                 <Link
                   to="/register"
-                  className="rounded-lg bg-violet-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-violet-500 md:px-3.5"
+                  className="rounded-lg bg-teal-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-teal-500 md:px-3.5"
                 >
                   Sign up
                 </Link>
@@ -326,7 +324,7 @@ export function Navbar() {
                   onClick={closeMenu}
                   className="flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm text-zinc-200 transition hover:bg-zinc-900 hover:text-white"
                 >
-                  <Bookmark className="h-5 w-5 text-violet-400" />
+                  <Bookmark className="h-5 w-5 text-teal-400" />
                   Watchlist
                 </Link>
               </li>

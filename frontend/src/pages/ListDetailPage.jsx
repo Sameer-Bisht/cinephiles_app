@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Globe, Lock, Pencil, Trash2 } from 'lucide-react';
@@ -81,21 +81,21 @@ export function ListDetailPage() {
               maxLength={80}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-3.5 py-2 text-lg font-bold text-white focus:border-violet-500 focus:outline-none"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-3.5 py-2 text-lg font-bold text-white focus:border-teal-500 focus:outline-none"
             />
             <textarea
               rows={2}
               maxLength={500}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 p-3 text-sm text-white focus:border-violet-500 focus:outline-none"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 p-3 text-sm text-white focus:border-teal-500 focus:outline-none"
             />
             <label className="flex items-center gap-2 text-sm text-zinc-300">
               <input
                 type="checkbox"
                 checked={isPublic}
                 onChange={(e) => setIsPublic(e.target.checked)}
-                className="h-4 w-4 accent-violet-600"
+                className="h-4 w-4 accent-teal-600"
               />
               <span>Public list</span>
             </label>
@@ -103,7 +103,7 @@ export function ListDetailPage() {
               <button
                 type="submit"
                 disabled={updateMutation.isPending}
-                className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-500"
+                className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-500"
               >
                 Save
               </button>
@@ -129,12 +129,12 @@ export function ListDetailPage() {
                     <Lock className="h-3.5 w-3.5" /> Private
                   </span>
                 )}
-                <span>•</span>
+                <span>â€¢</span>
                 <span>
                   Curated by{' '}
                   <Link
                     to={`/u/${list.owner?.username}`}
-                    className="font-semibold text-zinc-200 hover:text-violet-300"
+                    className="font-semibold text-zinc-200 hover:text-teal-300"
                   >
                     @{list.owner?.username}
                   </Link>
@@ -181,7 +181,7 @@ export function ListDetailPage() {
           {isOwner && (
             <Link
               to="/search"
-              className="inline-block rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-500"
+              className="inline-block rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-500"
             >
               Search movies to add
             </Link>

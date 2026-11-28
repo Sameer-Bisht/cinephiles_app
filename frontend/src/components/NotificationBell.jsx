@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Bell } from 'lucide-react';
@@ -85,7 +85,7 @@ export function NotificationBell() {
       >
         <Bell className="h-4 w-4" />
         {unreadCount > 0 && (
-          <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-violet-600 px-1 text-[10px] font-bold text-white">
+          <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-teal-600 px-1 text-[10px] font-bold text-white">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -108,7 +108,7 @@ export function NotificationBell() {
                   to={getNotificationLink(n)}
                   onClick={() => setOpen(false)}
                   className={`block px-4 py-3 text-xs transition hover:bg-zinc-900 ${
-                    n.isRead ? 'text-zinc-400' : 'bg-violet-500/5 text-zinc-100'
+                    n.isRead ? 'text-zinc-400' : 'bg-teal-500/5 text-zinc-100'
                   }`}
                 >
                   <p>{formatNotificationText(n)}</p>

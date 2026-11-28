@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { Film, Globe, Lock } from 'lucide-react';
 import { getPosterUrl } from '../utils/tmdb';
 
@@ -8,7 +8,7 @@ export function ListCard({ list }) {
   return (
     <Link
       to={`/lists/${list._id}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/50 transition hover:border-violet-500/60 hover:bg-zinc-900"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/50 transition hover:border-teal-500/60 hover:bg-zinc-900"
     >
       {/* 4-poster collage */}
       <div className="grid h-36 grid-cols-4 gap-0.5 bg-zinc-950">
@@ -32,7 +32,7 @@ export function ListCard({ list }) {
       <div className="flex flex-1 flex-col justify-between p-4 space-y-2">
         <div>
           <div className="flex items-center justify-between gap-2">
-            <h3 className="line-clamp-1 font-semibold text-white group-hover:text-violet-300">
+            <h3 className="line-clamp-1 font-semibold text-white group-hover:text-teal-300">
               {list.title}
             </h3>
             {list.isPublic ? (

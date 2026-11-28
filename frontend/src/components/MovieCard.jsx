@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { Film } from 'lucide-react';
 import { getPosterUrl } from '../utils/tmdb';
 
@@ -10,7 +10,7 @@ export function MovieCard({ movie }) {
   return (
     <Link
       to={`/title/${mediaType}/${movie.tmdbId}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-zinc-800/70 bg-zinc-900/40 transition hover:border-violet-500/60 hover:bg-zinc-900"
+      className="group flex flex-col overflow-hidden rounded-xl border border-zinc-800/70 bg-zinc-900/40 transition hover:border-teal-500/60 hover:bg-zinc-900"
     >
       <div className="relative aspect-[2/3] w-full overflow-hidden bg-zinc-900">
         {posterUrl ? (
@@ -27,7 +27,7 @@ export function MovieCard({ movie }) {
           </div>
         )}
         {badgeLabel && (
-          <span className="absolute left-2 top-2 rounded-md bg-violet-600/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
+          <span className="absolute left-2 top-2 rounded-md bg-teal-600/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
             {badgeLabel}
           </span>
         )}
@@ -39,7 +39,7 @@ export function MovieCard({ movie }) {
       </div>
 
       <div className="p-3">
-        <h3 className="line-clamp-1 text-sm font-semibold text-zinc-100 group-hover:text-violet-300">
+        <h3 className="line-clamp-1 text-sm font-semibold text-zinc-100 group-hover:text-teal-300">
           {movie.title}
         </h3>
       </div>

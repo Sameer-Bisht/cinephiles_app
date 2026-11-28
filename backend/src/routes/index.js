@@ -7,6 +7,7 @@ import watchlistRoutes from './watchlist.routes.js';
 import listRoutes from './list.routes.js';
 import chatRoutes from './chat.routes.js';
 import notificationRoutes from './notification.routes.js';
+import newsRoutes from './news.routes.js';
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use('/watchlist', watchlistRoutes);
 router.use('/lists', listRoutes);
 router.use('/chat', chatRoutes);
 router.use('/notifications', notificationRoutes);
+router.use('/news', newsRoutes);
 
 export default router;

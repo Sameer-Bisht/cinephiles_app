@@ -1,4 +1,4 @@
-const VERDICT_META = [
+﻿const VERDICT_META = [
   { key: 'skip', label: 'Pass', color: '#f43f5e', barClass: 'bg-rose-500', textClass: 'text-rose-400' },
   { key: 'casual', label: 'Casual', color: '#f59e0b', barClass: 'bg-amber-500', textClass: 'text-amber-400' },
   { key: 'recommended', label: 'Worth It', color: '#10b981', barClass: 'bg-emerald-500', textClass: 'text-emerald-400' },
@@ -17,7 +17,7 @@ export function VerdictMeter({ verdictCounts = {}, totalVotes = 0 }) {
       ? breakdown.reduce((best, curr) => (curr.count > best.count ? curr : best), breakdown[0])
       : null;
 
-  // Semi-circle SVG arc math (radius 70, circumference of half circle = pi * 70 ≈ 219.91)
+  // Semi-circle SVG arc math (radius 70, circumference of half circle = pi * 70 â‰ˆ 219.91)
   const radius = 70;
   const halfCircumference = Math.PI * radius;
   let cumulativeRatio = 0;
@@ -58,7 +58,7 @@ export function VerdictMeter({ verdictCounts = {}, totalVotes = 0 }) {
             </svg>
             <div className="absolute inset-x-0 bottom-1 text-center">
               <div className="text-2xl font-bold text-white">
-                {leading ? `${leading.pct}%` : '—'}
+                {leading ? `${leading.pct}%` : 'â€”'}
               </div>
               <div className={`text-xs font-semibold ${leading ? leading.textClass : 'text-zinc-400'}`}>
                 {leading ? leading.label : 'No votes yet'}
@@ -66,7 +66,7 @@ export function VerdictMeter({ verdictCounts = {}, totalVotes = 0 }) {
             </div>
           </div>
           <p className="mt-1 text-xs text-zinc-500">
-            {totalVotes} {totalVotes === 1 ? 'verdict' : 'verdicts'} on ReelClub
+            {totalVotes} {totalVotes === 1 ? 'verdict' : 'verdicts'} on Cinephiles
           </p>
         </div>
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AlertTriangle, Heart, MessageCircle, Send, User as UserIcon } from 'lucide-react';
@@ -63,11 +63,11 @@ export function ReviewCard({ review, tmdbId }) {
             </div>
           )}
           <div>
-            <p className="text-sm font-semibold text-white group-hover:text-violet-300">
+            <p className="text-sm font-semibold text-white group-hover:text-teal-300">
               {review.user?.displayName || review.user?.username}
             </p>
             <p className="text-xs text-zinc-500">
-              @{review.user?.username} • {new Date(review.watchedAt).toLocaleDateString()}
+              @{review.user?.username} â€¢ {new Date(review.watchedAt).toLocaleDateString()}
             </p>
           </div>
         </Link>
@@ -119,7 +119,7 @@ export function ReviewCard({ review, tmdbId }) {
         <button
           type="button"
           onClick={() => setCommentsOpen((prev) => !prev)}
-          className="inline-flex items-center gap-1.5 transition hover:text-violet-300"
+          className="inline-flex items-center gap-1.5 transition hover:text-teal-300"
         >
           <MessageCircle className="h-4 w-4" />
           <span>{review.commentsCount}</span>
@@ -150,12 +150,12 @@ export function ReviewCard({ review, tmdbId }) {
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder="Write a comment..."
-              className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none"
+              className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none"
             />
             <button
               type="submit"
               disabled={addCommentMutation.isPending}
-              className="inline-flex items-center gap-1 rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+              className="inline-flex items-center gap-1 rounded-lg bg-teal-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-teal-500 disabled:opacity-50"
             >
               <Send className="h-3.5 w-3.5" />
             </button>

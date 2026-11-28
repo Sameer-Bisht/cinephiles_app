@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Trash2, X } from 'lucide-react';
 import { reviewsApi } from '../api/reviews.api';
@@ -61,7 +61,7 @@ export function ReviewModal({ tmdbId, mediaType = 'movie', movieTitle, existingR
       >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-medium uppercase tracking-wider text-violet-400">
+            <p className="text-xs font-medium uppercase tracking-wider text-teal-400">
               {existingReview ? 'Edit your log' : 'Log & Review'}
             </p>
             <h2 className="mt-0.5 text-xl font-bold text-white">{movieTitle}</h2>
@@ -111,7 +111,7 @@ export function ReviewModal({ tmdbId, mediaType = 'movie', movieTitle, existingR
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Share your thoughts on the direction, pacing, performances..."
-              className="w-full rounded-xl border border-zinc-800 bg-zinc-900 p-3 text-sm text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none"
+              className="w-full rounded-xl border border-zinc-800 bg-zinc-900 p-3 text-sm text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none"
             />
           </div>
 
@@ -120,7 +120,7 @@ export function ReviewModal({ tmdbId, mediaType = 'movie', movieTitle, existingR
               type="checkbox"
               checked={containsSpoilers}
               onChange={(e) => setContainsSpoilers(e.target.checked)}
-              className="h-4 w-4 rounded border-zinc-700 bg-zinc-900 accent-violet-600"
+              className="h-4 w-4 rounded border-zinc-700 bg-zinc-900 accent-teal-600"
             />
             <span>Contains spoilers</span>
           </label>
@@ -159,7 +159,7 @@ export function ReviewModal({ tmdbId, mediaType = 'movie', movieTitle, existingR
               <button
                 type="submit"
                 disabled={saveMutation.isPending}
-                className="rounded-lg bg-violet-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-violet-500 disabled:opacity-50"
+                className="rounded-lg bg-teal-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-teal-500 disabled:opacity-50"
               >
                 {saveMutation.isPending ? 'Saving...' : 'Save'}
               </button>

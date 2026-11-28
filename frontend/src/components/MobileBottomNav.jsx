@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+﻿import { Link, useLocation } from 'react-router-dom';
 import { Home, MessageSquare, Search, Users, User as UserIcon } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 
@@ -22,7 +22,7 @@ export function MobileBottomNav() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-zinc-800/90 bg-zinc-950/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)] md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-800/80 bg-[#0a0d14]/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)] md:hidden"
     >
       <div className="mx-auto grid h-16 max-w-md grid-cols-5 items-center">
         {items.map(({ to, label, icon: Icon, match }) => {
@@ -33,7 +33,7 @@ export function MobileBottomNav() {
               to={to}
               aria-label={label}
               className={`flex h-full flex-col items-center justify-center gap-1 transition ${
-                active ? 'text-violet-400' : 'text-zinc-400 hover:text-zinc-200'
+                active ? 'text-teal-400' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               <Icon className={`h-5 w-5 ${active ? 'stroke-[2.4]' : 'stroke-[1.8]'}`} />
@@ -46,7 +46,7 @@ export function MobileBottomNav() {
           to={profilePath}
           aria-label="Profile"
           className={`flex h-full flex-col items-center justify-center gap-1 transition ${
-            isProfileActive ? 'text-violet-400' : 'text-zinc-400 hover:text-zinc-200'
+            isProfileActive ? 'text-teal-400' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           {user?.avatarUrl ? (
@@ -54,7 +54,7 @@ export function MobileBottomNav() {
               src={user.avatarUrl}
               alt={user.displayName || user.username}
               className={`h-5 w-5 rounded-full object-cover ${
-                isProfileActive ? 'ring-2 ring-violet-400' : 'ring-1 ring-zinc-700'
+                isProfileActive ? 'ring-2 ring-teal-400' : 'ring-1 ring-slate-700'
               }`}
             />
           ) : (

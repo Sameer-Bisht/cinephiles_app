@@ -1,8 +1,9 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { authApi } from '../api/auth.api';
 import { useAuthStore } from '../store/authStore';
+import { CinephilesLogo } from '../components/CinephilesLogo';
 
 export function LoginPage() {
   const [identifier, setIdentifier] = useState('');
@@ -26,9 +27,12 @@ export function LoginPage() {
   };
 
   return (
-    <div className="mx-auto mt-10 max-w-md rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+    <div className="mx-auto mt-10 max-w-md rounded-2xl border border-slate-800/80 bg-slate-900/50 p-8 shadow-2xl">
+      <div className="mb-5">
+        <CinephilesLogo size="lg" />
+      </div>
       <h1 className="text-2xl font-bold text-white">Welcome back</h1>
-      <p className="mt-1 text-sm text-zinc-400">Sign in to read full reviews, lists, and chat.</p>
+      <p className="mt-1 text-sm text-slate-400">Sign in to read full reviews, lists, and chat.</p>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <div>
@@ -41,7 +45,7 @@ export function LoginPage() {
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
             placeholder="nolan_fan or you@example.com"
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none"
+            className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none"
           />
         </div>
 
@@ -52,8 +56,8 @@ export function LoginPage() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none"
+            placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+            className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none"
           />
         </div>
 
@@ -66,15 +70,15 @@ export function LoginPage() {
         <button
           type="submit"
           disabled={mutation.isPending}
-          className="w-full rounded-lg bg-violet-600 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500 disabled:opacity-50"
+          className="w-full rounded-lg bg-teal-600 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-500 disabled:opacity-50"
         >
           {mutation.isPending ? 'Signing in...' : 'Log in'}
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-zinc-400">
-        New to ReelClub?{' '}
-        <Link to="/register" className="font-medium text-violet-400 hover:text-violet-300">
+      <p className="mt-6 text-center text-sm text-slate-400">
+        New to Cinephiles?{' '}
+        <Link to="/register" className="font-medium text-teal-400 hover:text-teal-300">
           Create an account
         </Link>
       </p>

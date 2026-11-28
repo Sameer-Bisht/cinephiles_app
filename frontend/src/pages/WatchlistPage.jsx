@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Bookmark, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { watchlistApi } from '../api/watchlist.api';
@@ -23,7 +23,7 @@ export function WatchlistPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <Bookmark className="h-5 w-5 text-violet-400" />
+          <Bookmark className="h-5 w-5 text-teal-400" />
           <h1 className="text-2xl font-bold text-white">Your Watchlist</h1>
         </div>
         {data && (
@@ -46,7 +46,7 @@ export function WatchlistPage() {
           <p className="text-zinc-400">Your watchlist is empty.</p>
           <Link
             to="/search"
-            className="inline-block rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-500"
+            className="inline-block rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-500"
           >
             Find movies to add
           </Link>

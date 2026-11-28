@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -95,7 +95,7 @@ export function MovieDetailPage() {
               <button
                 type="button"
                 onClick={() => setShowTrailer(true)}
-                className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-black/75 px-4 py-2 text-xs font-semibold text-white backdrop-blur-md transition hover:bg-violet-600"
+                className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-black/75 px-4 py-2 text-xs font-semibold text-white backdrop-blur-md transition hover:bg-teal-600"
               >
                 <Play className="h-3.5 w-3.5 fill-current" />
                 Watch Trailer
@@ -118,15 +118,15 @@ export function MovieDetailPage() {
           <div className="flex-1 space-y-3">
             <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-400">
               <span>{movie.isAnime ? 'Anime' : movie.mediaType === 'tv' ? 'TV Series' : 'Movie'}</span>
-              {movie.releaseYear && <span>• {movie.releaseYear}</span>}
+              {movie.releaseYear && <span>â€¢ {movie.releaseYear}</span>}
               {movie.mediaType === 'tv' && movie.numberOfSeasons && (
                 <span>
-                  • {movie.numberOfSeasons} {movie.numberOfSeasons === 1 ? 'Season' : 'Seasons'}
+                  â€¢ {movie.numberOfSeasons} {movie.numberOfSeasons === 1 ? 'Season' : 'Seasons'}
                 </span>
               )}
               {runtimeStr && (
                 <span className="inline-flex items-center gap-1">
-                  • <Clock className="h-3 w-3" /> {runtimeStr}
+                  â€¢ <Clock className="h-3 w-3" /> {runtimeStr}
                 </span>
               )}
               <span className="ml-auto rounded-full border border-zinc-800 bg-zinc-950 px-2.5 py-0.5 text-[11px] text-zinc-500">
@@ -170,7 +170,7 @@ export function MovieDetailPage() {
                 <button
                   type="button"
                   onClick={() => setReviewModalOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500"
+                  className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-500"
                 >
                   {myReview ? (
                     <>
@@ -232,7 +232,7 @@ export function MovieDetailPage() {
 
       {/* Verdict Meter (Visible to everyone, including logged-out visitors) */}
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-white">ReelClub Verdict Meter</h2>
+        <h2 className="text-lg font-semibold text-white">Cinephiles Verdict Meter</h2>
         <VerdictMeter verdictCounts={movie.verdictCounts} totalVotes={movie.totalVotes} />
       </section>
 
@@ -284,7 +284,7 @@ export function MovieDetailPage() {
                 onClick={() => setReviewSort('recent')}
                 className={`rounded-md px-3 py-1 font-medium transition ${
                   reviewSort === 'recent'
-                    ? 'bg-violet-600 text-white'
+                    ? 'bg-teal-600 text-white'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
@@ -295,7 +295,7 @@ export function MovieDetailPage() {
                 onClick={() => setReviewSort('likes')}
                 className={`rounded-md px-3 py-1 font-medium transition ${
                   reviewSort === 'likes'
-                    ? 'bg-violet-600 text-white'
+                    ? 'bg-teal-600 text-white'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
@@ -310,7 +310,7 @@ export function MovieDetailPage() {
             <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
               <div className="space-y-1">
                 <p className="flex items-center gap-2 font-semibold text-white">
-                  <Lock className="h-4 w-4 text-violet-400" />
+                  <Lock className="h-4 w-4 text-teal-400" />
                   Reviews & Comments are for members
                 </p>
                 <p className="text-sm text-zinc-400">
@@ -319,7 +319,7 @@ export function MovieDetailPage() {
               </div>
               <Link
                 to="/login"
-                className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-violet-500"
+                className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-teal-500"
               >
                 Log in to unlock
               </Link>

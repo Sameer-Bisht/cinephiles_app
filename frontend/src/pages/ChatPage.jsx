@@ -1,4 +1,4 @@
-// import { useEffect, useRef, useState } from 'react';
+﻿// import { useEffect, useRef, useState } from 'react';
 // import { useSearchParams } from 'react-router-dom';
 // import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 // import { Check, MessageSquare, Send, User as UserIcon, X } from 'lucide-react';
@@ -164,7 +164,7 @@
 //               type="button"
 //               onClick={() => setTab('inbox')}
 //               className={`flex-1 rounded-lg py-1.5 transition ${
-//                 tab === 'inbox' ? 'bg-violet-600 text-white' : 'text-zinc-400 hover:text-white'
+//                 tab === 'inbox' ? 'bg-teal-600 text-white' : 'text-zinc-400 hover:text-white'
 //               }`}
 //             >
 //               Chats ({inboxConversations.length})
@@ -173,7 +173,7 @@
 //               type="button"
 //               onClick={() => setTab('requests')}
 //               className={`flex-1 rounded-lg py-1.5 transition ${
-//                 tab === 'requests' ? 'bg-violet-600 text-white' : 'text-zinc-400 hover:text-white'
+//                 tab === 'requests' ? 'bg-teal-600 text-white' : 'text-zinc-400 hover:text-white'
 //               }`}
 //             >
 //               Requests ({requestConversations.length})
@@ -192,12 +192,12 @@
 //               value={newUsername}
 //               onChange={(e) => setNewUsername(e.target.value)}
 //               placeholder="Start chat with @username"
-//               className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none"
+//               className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none"
 //             />
 //             <button
 //               type="submit"
 //               disabled={startMutation.isPending}
-//               className="rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-violet-500"
+//               className="rounded-lg bg-teal-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-teal-500"
 //             >
 //               Chat
 //             </button>
@@ -224,7 +224,7 @@
 //                   type="button"
 //                   onClick={() => setActiveId(conv._id)}
 //                   className={`flex w-full items-center gap-3 p-3.5 text-left transition ${
-//                     isActive ? 'bg-violet-600/15' : 'hover:bg-zinc-900'
+//                     isActive ? 'bg-teal-600/15' : 'hover:bg-zinc-900'
 //                   }`}
 //                 >
 //                   {other?.avatarUrl ? (
@@ -244,7 +244,7 @@
 //                         {other?.displayName || other?.username}
 //                       </p>
 //                       {conv.myUnreadCount > 0 && (
-//                         <span className="rounded-full bg-violet-600 px-2 py-0.5 text-[10px] font-bold text-white">
+//                         <span className="rounded-full bg-teal-600 px-2 py-0.5 text-[10px] font-bold text-white">
 //                           {conv.myUnreadCount}
 //                         </span>
 //                       )}
@@ -277,7 +277,7 @@
 //                 </p>
 //                 <p className="text-xs text-zinc-500">
 //                   @{activeConversation.otherParticipant?.username}
-//                   {otherTyping && <span className="ml-2 text-violet-400">typing...</span>}
+//                   {otherTyping && <span className="ml-2 text-teal-400">typing...</span>}
 //                 </p>
 //               </div>
 //               {activeConversation.status === 'pending' && (
@@ -328,7 +328,7 @@
 //                     <div
 //                       className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm ${
 //                         isMine
-//                           ? 'bg-violet-600 text-white'
+//                           ? 'bg-teal-600 text-white'
 //                           : 'border border-zinc-800 bg-zinc-950 text-zinc-200'
 //                       }`}
 //                     >
@@ -354,12 +354,12 @@
 //                 placeholder={
 //                   isIncomingPending ? 'Accept the request to reply...' : 'Type a message...'
 //                 }
-//                 className="flex-1 rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none disabled:opacity-50"
+//                 className="flex-1 rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none disabled:opacity-50"
 //               />
 //               <button
 //                 type="submit"
 //                 disabled={isIncomingPending || !text.trim()}
-//                 className="inline-flex items-center justify-center rounded-xl bg-violet-600 p-2.5 text-white transition hover:bg-violet-500 disabled:opacity-40"
+//                 className="inline-flex items-center justify-center rounded-xl bg-teal-600 p-2.5 text-white transition hover:bg-teal-500 disabled:opacity-40"
 //               >
 //                 <Send className="h-4 w-4" />
 //               </button>
@@ -564,7 +564,7 @@ export function ChatPage() {
               type="button"
               onClick={() => setTab('inbox')}
               className={`flex-1 rounded-lg py-2 transition md:py-1.5 ${
-                tab === 'inbox' ? 'bg-violet-600 text-white' : 'text-zinc-400 hover:text-white'
+                tab === 'inbox' ? 'bg-teal-600 text-white' : 'text-zinc-400 hover:text-white'
               }`}
             >
               Chats ({inboxConversations.length})
@@ -573,7 +573,7 @@ export function ChatPage() {
               type="button"
               onClick={() => setTab('requests')}
               className={`flex-1 rounded-lg py-2 transition md:py-1.5 ${
-                tab === 'requests' ? 'bg-violet-600 text-white' : 'text-zinc-400 hover:text-white'
+                tab === 'requests' ? 'bg-teal-600 text-white' : 'text-zinc-400 hover:text-white'
               }`}
             >
               Requests ({requestConversations.length})
@@ -594,12 +594,12 @@ export function ChatPage() {
               onChange={(e) => setNewUsername(e.target.value)}
               placeholder="Start chat with @username"
               aria-label="Username to chat with"
-              className="min-w-0 flex-1 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-base text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none md:py-1.5 md:text-xs"
+              className="min-w-0 flex-1 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-base text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none md:py-1.5 md:text-xs"
             />
             <button
               type="submit"
               disabled={startMutation.isPending}
-              className="shrink-0 rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-500 md:px-3 md:py-1.5 md:text-xs"
+              className="shrink-0 rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-500 md:px-3 md:py-1.5 md:text-xs"
             >
               Chat
             </button>
@@ -626,7 +626,7 @@ export function ChatPage() {
                   type="button"
                   onClick={() => setActiveId(conv._id)}
                   className={`flex w-full items-center gap-3 p-3.5 text-left transition ${
-                    isActive ? 'bg-violet-600/15' : 'hover:bg-zinc-900 active:bg-zinc-900'
+                    isActive ? 'bg-teal-600/15' : 'hover:bg-zinc-900 active:bg-zinc-900'
                   }`}
                 >
                   {other?.avatarUrl ? (
@@ -646,7 +646,7 @@ export function ChatPage() {
                         {other?.displayName || other?.username}
                       </p>
                       {conv.myUnreadCount > 0 && (
-                        <span className="shrink-0 rounded-full bg-violet-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                        <span className="shrink-0 rounded-full bg-teal-600 px-2 py-0.5 text-[10px] font-bold text-white">
                           {conv.myUnreadCount}
                         </span>
                       )}
@@ -691,7 +691,7 @@ export function ChatPage() {
                 </p>
                 <p className="truncate text-xs text-zinc-500">
                   @{activeConversation.otherParticipant?.username}
-                  {otherTyping && <span className="ml-2 text-violet-400">typing...</span>}
+                  {otherTyping && <span className="ml-2 text-teal-400">typing...</span>}
                 </p>
               </div>
               {activeConversation.status === 'pending' && (
@@ -743,7 +743,7 @@ export function ChatPage() {
                     <div
                       className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm md:max-w-[75%] ${
                         isMine
-                          ? 'bg-violet-600 text-white'
+                          ? 'bg-teal-600 text-white'
                           : 'border border-zinc-800 bg-zinc-950 text-zinc-200'
                       }`}
                     >
@@ -770,13 +770,13 @@ export function ChatPage() {
                   isIncomingPending ? 'Accept the request to reply...' : 'Type a message...'
                 }
                 aria-label="Message"
-                className="min-w-0 flex-1 rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-base text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none disabled:opacity-50 md:text-sm"
+                className="min-w-0 flex-1 rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-base text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none disabled:opacity-50 md:text-sm"
               />
               <button
                 type="submit"
                 disabled={isIncomingPending || !text.trim()}
                 aria-label="Send message"
-                className="inline-flex shrink-0 items-center justify-center rounded-xl bg-violet-600 p-3 text-white transition hover:bg-violet-500 disabled:opacity-40 md:p-2.5"
+                className="inline-flex shrink-0 items-center justify-center rounded-xl bg-teal-600 p-3 text-white transition hover:bg-teal-500 disabled:opacity-40 md:p-2.5"
               >
                 <Send className="h-4 w-4" />
               </button>

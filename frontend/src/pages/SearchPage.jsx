@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
@@ -71,7 +71,7 @@ export function SearchPage() {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Search movies, web series, or anime..."
             autoFocus
-            className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-500 focus:border-violet-500 focus:outline-none"
+            className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-500 focus:border-teal-500 focus:outline-none"
           />
         </div>
 
@@ -83,7 +83,7 @@ export function SearchPage() {
               onClick={() => handleTypeChange(f.key)}
               className={`rounded-lg px-3 py-1.5 font-medium transition ${
                 mediaType === f.key
-                  ? 'bg-violet-600 text-white'
+                  ? 'bg-teal-600 text-white'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
