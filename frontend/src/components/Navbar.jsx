@@ -242,7 +242,7 @@ export function Navbar() {
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600 text-white">
               <Film className="h-4 w-4" />
             </span>
-            <span className="hidden sm:inline">ReelClub</span>
+            <span>ReelClub</span>
           </Link>
 
           {/* Search: inline on md+, separate row on mobile (below) */}
@@ -316,42 +316,30 @@ export function Navbar() {
           </nav>
         </div>
 
-        {/* Mobile search row */}
-        <SearchForm
-          value={searchTerm}
-          onChange={setSearchTerm}
-          onSubmit={handleSearchSubmit}
-          className="pb-3 md:hidden"
-        />
-
-        {/* Mobile menu panel */}
+        {/* Mobile menu panel (secondary links: Watchlist, Lists, Settings, Logout) */}
         {user && menuOpen && (
           <div id="mobile-menu" className="border-t border-zinc-800/80 py-3 md:hidden">
-            <Link
-              to={`/u/${user.username}`}
-              onClick={closeMenu}
-              className="mb-2 flex items-center gap-3 rounded-lg px-3 py-2.5 transition hover:bg-zinc-900"
-            >
-              <UserAvatar user={user} size="h-9 w-9" />
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-medium text-white">{user.displayName}</span>
-                <span className="block truncate text-xs text-zinc-500">@{user.username}</span>
-              </span>
-            </Link>
-
             <ul className="space-y-1">
-              {NAV_LINKS.map(({ to, label, icon: Icon, color }) => (
-                <li key={to}>
-                  <Link
-                    to={to}
-                    onClick={closeMenu}
-                    className="flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm text-zinc-200 transition hover:bg-zinc-900 hover:text-white"
-                  >
-                    <Icon className={`h-5 w-5 ${color}`} />
-                    {label}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link
+                  to="/watchlist"
+                  onClick={closeMenu}
+                  className="flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm text-zinc-200 transition hover:bg-zinc-900 hover:text-white"
+                >
+                  <Bookmark className="h-5 w-5 text-violet-400" />
+                  Watchlist
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/lists"
+                  onClick={closeMenu}
+                  className="flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm text-zinc-200 transition hover:bg-zinc-900 hover:text-white"
+                >
+                  <ListVideo className="h-5 w-5 text-amber-400" />
+                  Lists
+                </Link>
+              </li>
             </ul>
 
             <button

@@ -551,7 +551,7 @@ export function ChatPage() {
     activeConversation?.status === 'pending' && activeConversation?.requestedBy !== user?._id;
 
   return (
-    <div className="grid h-[calc(100dvh-9rem)] grid-rows-1 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 md:h-[calc(100dvh-8.5rem)] md:grid-cols-3">
+    <div className="grid h-[calc(100dvh-10.5rem)] grid-rows-1 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 md:h-[calc(100dvh-8.5rem)] md:grid-cols-3">
       {/* Left Sidebar: Inbox & Requests (hidden on mobile while a chat is open) */}
       <aside
         className={`min-h-0 flex-col border-zinc-800 md:flex md:border-r ${
